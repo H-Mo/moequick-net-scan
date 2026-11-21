@@ -1,0 +1,27 @@
+# 构建产物
+build/
+bin/
+obj/
+
+# 工具链缓存（首次构建时由 build.ps1 自动从 NuGet 下载 29MB 引用程序集）
+# 不纳入版本控制，避免仓库膨胀；离线构建时请预先执行 build.ps1 一次
+.toolchain/
+
+# 运行期生成
+MQNetScan.ini
+MQNetScan.log
+*.log
+
+# IDE / 编辑器
+.vs/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# 系统文件
+Thumbs.db
+desktop.ini
+*.user
+*.suo

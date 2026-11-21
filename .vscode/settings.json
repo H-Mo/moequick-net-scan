@@ -1,0 +1,42 @@
+{
+    "files.eol": "\r\n",
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+
+    "editor.formatOnSave": false,
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.rulers": [ 100 ],
+
+    "[csharp]": {
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true
+    },
+
+    "[powershell]": {
+        "files.encoding": "utf8bom"
+    },
+
+    "csharp.suppressDotnetInstallWarning": true,
+    "csharp.suppressDotnetRestoreNotification": true,
+
+    "files.associations": {
+        "*.manifest": "xml",
+        "app.config": "xml"
+    },
+
+    "files.exclude": {
+        "**/build": true,
+        "**/obj": true,
+        "**/bin": true,
+        "**/.toolchain": true
+    },
+
+    "search.exclude": {
+        "**/build": true,
+        "**/obj": true,
+        "**/.toolchain": true
+    },
+
+    "dotnet.server.useOmnisharp": true
+}

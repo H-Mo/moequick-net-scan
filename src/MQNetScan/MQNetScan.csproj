@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A1B2C3D4-0001-4000-9000-000000000001}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>MQNetScan</RootNamespace>
+    <AssemblyName>MQNetScan</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ApplicationIcon>Resources\app.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AppConfig>app.config</AppConfig>
+    <!--
+      LangVersion=3：锁定 C# 3.0 语法。
+      本机 csc 最高只支持 C# 5，C# 6+ 语法（$""、nameof、?.）天然被拒；
+      显式锁 3 的目的是：将来若用 VS 的 Roslyn 编译器构建，也能继续挡住 C# 4/5/6 语法，
+      让"红线"不依赖具体编译器版本（project-structure.md §5.1）。
+    -->
+    <LangVersion>3</LangVersion>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>1591</NoWarn>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\build\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Test|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\build\Test\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>false</DebugSymbols>
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\build\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Application\ConnectivityChecker.cs" />
+    <Compile Include="Application\ReportBuilder.cs" />
+    <Compile Include="Application\ReportSaveService.cs" />
+    <Compile Include="Application\ToolsService.cs" />
+    <Compile Include="Engine\AddressQueue.cs" />
+    <Compile Include="Engine\ArpProber.cs" />
+    <Compile Include="Engine\CompositeProber.cs" />
+    <Compile Include="Engine\ConflictDetector.cs" />
+    <Compile Include="Engine\Contracts\Dto.cs" />
+    <Compile Include="Engine\Contracts\Enums.cs" />
+    <Compile Include="Engine\Contracts\Interfaces.cs" />
+    <Compile Include="Engine\GatewayProber.cs" />
+    <Compile Include="Engine\Ipv4Util.cs" />
+    <Compile Include="Engine\NetSegment.cs" />
+    <Compile Include="Engine\Ping3Tester.cs" />
+    <Compile Include="Engine\PortProber.cs" />
+    <Compile Include="Engine\ProgressTracker.cs" />
+    <Compile Include="Engine\ResultQueue.cs" />
+    <Compile Include="Engine\RoleResolver.cs" />
+    <Compile Include="Engine\ScanSession.cs" />
+    <Compile Include="Engine\ScanStateMachine.cs" />
+    <Compile Include="Infrastructure\IniConfigStore.cs" />
+    <Compile Include="Infrastructure\IniSchema.cs" />
+    <Compile Include="Infrastructure\NativeMethods.cs" />
+    <Compile Include="Infrastructure\NetworkAdapterService.cs" />
+    <Compile Include="Infrastructure\PortRule.cs" />
+    <Compile Include="Infrastructure\RoleDefinition.cs" />
+    <Compile Include="Infrastructure\ArpTableReader.cs" />
+    <Compile Include="Infrastructure\ProcessLauncher.cs" />
+    <Compile Include="Infrastructure\SettingsService.cs" />
+    <Compile Include="Presentation\Common\AlertBanner.cs" />
+    <Compile Include="Presentation\Common\ListViewHelper.cs" />
+    <Compile Include="Presentation\Common\PlaceholderPage.cs" />
+    <Compile Include="Presentation\Common\UiDispatcher.cs" />
+    <Compile Include="Presentation\Common\UiText.cs" />
+    <Compile Include="Presentation\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Presentation\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Presentation\Pages\ScanPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Presentation\Pages\ScanPage.Designer.cs">
+      <DependentUpon>ScanPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Presentation\Pages\ToolsPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Presentation\Pages\ToolsPage.Designer.cs">
+      <DependentUpon>ToolsPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Presentation\Pages\SettingsPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Presentation\Pages\SettingsPage.Designer.cs">
+      <DependentUpon>SettingsPage.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="app.manifest" />
+    <None Include="app.config" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\app.ico" />
+  </ItemGroup>
+
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
