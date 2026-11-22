@@ -44,14 +44,14 @@ namespace MQNetScan.Tests
 
             using (ListView lv = CreateList())
             {
-                TestRunner.AssertEqual(7, lv.Columns.Count, "共 7 列");
+                TestRunner.AssertEqual(ListViewHelper.ColumnCount, lv.Columns.Count, "列表列数符合当前定义");
                 TestRunner.AssertEqual(View.Details, lv.View, "视图为 Details");
                 TestRunner.AssertTrue(lv.FullRowSelect, "整行选中");
                 TestRunner.AssertTrue(lv.GridLines, "显示网格线");
                 TestRunner.AssertTrue(lv.MultiSelect, "支持多选");
                 TestRunner.AssertTrue(!lv.LabelEdit, "禁止就地编辑");
 
-                string[] expected = { "#", "IP 地址", "MAC 地址", "厂商前缀", "开放端口", "角色", "深度测速" };
+                string[] expected = { "#", "IP 地址", "MAC 地址", "厂商前缀", "开放端口", "角色", "可信度", "识别依据", "深度测速" };
 
                 for (int i = 0; i < expected.Length; i++)
                 {
@@ -238,7 +238,7 @@ namespace MQNetScan.Tests
                 TestRunner.AssertEqual(2, lines.Length, "共 2 行");
 
                 string[] cols = lines[0].Split('\t');
-                TestRunner.AssertEqual(7, cols.Length, "每行 7 列（制表符分隔）");
+                TestRunner.AssertEqual(ListViewHelper.ColumnCount, cols.Length, "每行列数符合当前定义（制表符分隔）");
                 TestRunner.AssertEqual("192.168.1.5", cols[ListViewHelper.ColIp], "第 1 行 IP 正确");
                 TestRunner.AssertEqual("Windows 电脑", cols[ListViewHelper.ColRole], "第 1 行角色正确");
             }

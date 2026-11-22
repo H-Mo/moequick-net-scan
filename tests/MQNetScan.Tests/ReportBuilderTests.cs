@@ -112,6 +112,8 @@ namespace MQNetScan.Tests
             TestRunner.AssertTrue(text.IndexOf("00:26:66:AA:BB:CC") >= 0, "明细含 MAC");
             TestRunner.AssertTrue(text.IndexOf("00:26:66") >= 0, "明细含 OUI");
             TestRunner.AssertTrue(text.IndexOf("9100") >= 0, "明细含端口");
+            TestRunner.AssertTrue(text.IndexOf("可信度") >= 0, "明细含可信度列");
+            TestRunner.AssertTrue(text.IndexOf("识别依据") >= 0, "明细含识别依据列");
             TestRunner.AssertTrue(text.IndexOf("打印机") >= 0, "明细含角色");
 
             // 结论段应含设备构成统计

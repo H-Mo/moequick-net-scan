@@ -192,15 +192,63 @@ namespace MQNetScan.Engine
             // ---- 3. 角色判定 ----
             string role = RoleResolver.Resolve(openPorts, _roles);
 
-            // ---- 4. 组装记录 ----
+            // ---- 4. 组装记录与可解释识别信息 ----
             HostRecord record = new HostRecord(address, alive.MacAddress, openPorts);
             record.Role = role;
+            ApplyDetectionEvidence(record, role, openPorts);
             record.ConflictFlag = conflicted;
 
             return record;
         }
 
         /// <summary>
+        private static void ApplyDetectionEvidence(HostRecord record, string role, int[] openPorts)
+        {
+            if (role == RolePriority.RoleAndroidDevice)
+            {
+                record.Confidence = DeviceConfidence.High;
+                record.Evidence = "端口 5555（ADB）";
+                record.DetectionSource = "Ports";
+            }
+            else if (role == RolePriority.RoleWindowsPc)
+            {
+                record.Confidence = DeviceConfidence.High;
+                record.Evidence = "Windows 特征端口（135/445/3389）";
+                record.DetectionSource = "Ports";
+            }
+            else if (role == RolePriority.RolePrinter)
+            {
+                record.Confidence = DeviceConfidence.High;
+                record.Evidence = "打印服务端口（515/631/9100）";
+                record.DetectionSource = "Ports";
+            }
+            else if (role == RolePriority.RoleScale)
+            {
+                record.Confidence = DeviceConfidence.Medium;
+                record.Evidence = "电子秤通讯端口（3000/4001/5000/8000）";
+                record.DetectionSource = "Ports";
+            }
+            else if (role == RolePriority.RoleLocalServer)
+            {
+                record.Confidence = DeviceConfidence.Medium;
+                record.Evidence = "SQL Server 端口（1433）";
+                record.DetectionSource = "Ports";
+            }
+            else if (role == RolePriority.RoleNetworkDevice)
+            {
+                record.Confidence = DeviceConfidence.Low;
+                record.Evidence = "Web 管理端口（80/443）";
+                record.DetectionSource = "Ports";
+            }
+            else
+            {
+                record.Confidence = DeviceConfidence.Unknown;
+                record.Evidence = openPorts == null || openPorts.Length == 0
+                    ? "未发现特征端口" : "未命中特征规则";
+                record.DetectionSource = "Ports";
+            }
+        }
+
         /// 把 MAC 统一成大写冒号分隔形式，便于比较。
         /// </summary>
         private static string NormalizeMac(string mac)

@@ -30,9 +30,11 @@ namespace MQNetScan.Presentation.Common
         public const int ColOui = 3;
         public const int ColPorts = 4;
         public const int ColRole = 5;
-        public const int ColPing3 = 6;
+        public const int ColConfidence = 6;
+        public const int ColEvidence = 7;
+        public const int ColPing3 = 8;
 
-        public const int ColumnCount = 7;
+        public const int ColumnCount = 9;
 
         /// <summary>
         /// 初始化列头与基本样式。
@@ -55,6 +57,8 @@ namespace MQNetScan.Presentation.Common
             AddColumn(listView, "厂商前缀", 90, HorizontalAlignment.Left);
             AddColumn(listView, "开放端口", 180, HorizontalAlignment.Left);
             AddColumn(listView, "角色", 110, HorizontalAlignment.Left);
+            AddColumn(listView, "可信度", 70, HorizontalAlignment.Left);
+            AddColumn(listView, "识别依据", 190, HorizontalAlignment.Left);
             AddColumn(listView, "深度测速", 150, HorizontalAlignment.Left);
         }
 
@@ -82,6 +86,8 @@ namespace MQNetScan.Presentation.Common
             item.SubItems.Add(string.IsNullOrEmpty(record.MacAddress) ? "—" : record.OuiPrefix);
             item.SubItems.Add(record.OpenPortsText);
             item.SubItems.Add(record.Role);
+            item.SubItems.Add(GetConfidenceText(record.Confidence));
+            item.SubItems.Add(record.Evidence);
             item.SubItems.Add(record.Ping3Text);
 
             // 把 IP 的数值形式存进 Tag，供排序使用（避免每次排序重新解析）
@@ -96,6 +102,14 @@ namespace MQNetScan.Presentation.Common
         /// 按角色设置行底色（低饱和度，保证 Win7 基本主题下可读）。
         /// 颜色仅作辅助信息，文字必须能独立表达含义（PRD §7.3）。
         /// </summary>
+        private static string GetConfidenceText(DeviceConfidence confidence)
+        {
+            if (confidence == DeviceConfidence.High) { return "高"; }
+            if (confidence == DeviceConfidence.Medium) { return "中"; }
+            if (confidence == DeviceConfidence.Low) { return "低"; }
+            return "未知";
+        }
+
         public static void ApplyRoleColor(ListViewItem item, string role)
         {
             switch (role)

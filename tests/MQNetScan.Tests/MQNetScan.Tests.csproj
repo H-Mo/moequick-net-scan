@@ -55,6 +55,7 @@
     <Compile Include="SettingsPageTests.cs" />
     <Compile Include="NetSegmentTests.cs" />
     <Compile Include="ScanPageTests.cs" />
+    <Compile Include="ScanLayoutTests.cs" />
     <Compile Include="ScanSessionTests.cs" />
     <Compile Include="ScanPageScanTests.cs" />
     <Compile Include="ArpProberTests.cs" />

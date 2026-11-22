@@ -145,8 +145,8 @@ namespace MQNetScan.Application
             }
 
             // 列宽：编号(4) IP(16) MAC(18) 厂商前缀(11) 开放端口(20) 角色
-            sb.AppendLine("编号  IP 地址          MAC 地址            厂商前缀    开放端口              角色");
-            sb.AppendLine("----  ---------------  ------------------  ----------  --------------------  ----------");
+            sb.AppendLine("编号  IP 地址          MAC 地址            厂商前缀    开放端口              角色        可信度  识别依据");
+            sb.AppendLine("----  ---------------  ------------------  ----------  --------------------  ----------  ------  ------------------------------");
 
             for (int i = 0; i < input.Hosts.Count; i++)
             {
@@ -158,13 +158,17 @@ namespace MQNetScan.Application
                 string oui = PadRight(Truncate(Safe(h.OuiPrefix), 10), 10);
                 string ports = PadRight(Truncate(Safe(h.OpenPortsText), 20), 20);
                 string role = Safe(h.Role);
+                string confidence = ConfidenceText(h.Confidence);
+                string evidence = Truncate(Safe(h.Evidence), 30);
 
                 sb.Append(index).Append("  ")
                   .Append(ip).Append("  ")
                   .Append(mac).Append("  ")
                   .Append(oui).Append("  ")
                   .Append(ports).Append("  ")
-                  .Append(role).AppendLine();
+                  .Append(PadRight(role, 10)).Append("  ")
+                  .Append(PadRight(confidence, 6)).Append("  ")
+                  .Append(evidence).AppendLine();
             }
 
             sb.AppendLine();
@@ -530,6 +534,14 @@ namespace MQNetScan.Application
                 || (c >= 0xFE30 && c <= 0xFE6F)     // CJK 兼容形式
                 || (c >= 0xFF00 && c <= 0xFF60)     // 全角形式
                 || (c >= 0xFFE0 && c <= 0xFFE6);
+        }
+
+        private static string ConfidenceText(DeviceConfidence confidence)
+        {
+            if (confidence == DeviceConfidence.High) { return "高"; }
+            if (confidence == DeviceConfidence.Medium) { return "中"; }
+            if (confidence == DeviceConfidence.Low) { return "低"; }
+            return "未知";
         }
 
         private static string Safe(string s)

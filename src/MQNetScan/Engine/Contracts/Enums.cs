@@ -22,6 +22,15 @@ namespace MQNetScan.Engine.Contracts
         Completed = 4
     }
 
+    /// <summary>设备识别可信度。</summary>
+    internal enum DeviceConfidence
+    {
+        Unknown = 0,
+        Low = 1,
+        Medium = 2,
+        High = 3
+    }
+
     /// <summary>设备存活探测方式。</summary>
     internal enum ProbeMode
     {
@@ -77,6 +86,10 @@ namespace MQNetScan.Engine.Contracts
         public const string RolePrinter = "打印机";
         public const string RoleScale = "电子秤";
         public const string RoleAndroidDevice = "安卓设备";
+        public const string RoleAppleDevice = "iPhone / iPad";
+        public const string RoleDisplayDevice = "电视 / 显示设备";
+        public const string RoleRouter = "路由器 / 网络设备";
+        public const string RoleIotDevice = "其它 IoT 设备";
         public const string RoleAndroidPos = RoleAndroidDevice; // 兼容旧代码
         public const string RoleNetworkDevice = "网络设备";
         public const string RoleUnknown = "未知";

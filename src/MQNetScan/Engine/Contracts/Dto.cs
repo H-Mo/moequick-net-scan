@@ -17,6 +17,9 @@ namespace MQNetScan.Engine.Contracts
         private readonly string _macAddress;
         private readonly int[] _openPorts;
         private string _role;
+        private DeviceConfidence _confidence;
+        private string _evidence;
+        private string _detectionSource;
         private Ping3Result _ping3;
         private bool _hasPing3;
         private bool _conflictFlag;
@@ -28,6 +31,9 @@ namespace MQNetScan.Engine.Contracts
             _macAddress = macAddress == null ? "" : macAddress;
             _openPorts = openPorts == null ? EmptyPorts : openPorts;
             _role = RolePriority.RoleUnknown;
+            _confidence = DeviceConfidence.Unknown;
+            _evidence = "";
+            _detectionSource = "";
         }
 
         /// <summary>行号（从 1 开始，由 UI 赋值）。</summary>
@@ -84,6 +90,27 @@ namespace MQNetScan.Engine.Contracts
         {
             get { return _role; }
             set { _role = value == null ? RolePriority.RoleUnknown : value; }
+        }
+
+        /// <summary>识别可信度。</summary>
+        public DeviceConfidence Confidence
+        {
+            get { return _confidence; }
+            set { _confidence = value; }
+        }
+
+        /// <summary>识别依据，例如“端口 5555（ADB）”或“默认网关”。</summary>
+        public string Evidence
+        {
+            get { return _evidence; }
+            set { _evidence = value == null ? "" : value; }
+        }
+
+        /// <summary>识别来源，例如 Ports、Gateway、SSDP、mDNS、OUI。</summary>
+        public string DetectionSource
+        {
+            get { return _detectionSource; }
+            set { _detectionSource = value == null ? "" : value; }
         }
 
         /// <summary>是否已做过深度测速。</summary>

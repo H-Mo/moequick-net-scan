@@ -315,9 +315,9 @@ namespace MQNetScan.Presentation.Pages
             this.listHosts.FullRowSelect = true;
             this.listHosts.GridLines = true;
             this.listHosts.HideSelection = false;
-            this.listHosts.Location = new System.Drawing.Point(14, 306);
+            this.listHosts.Location = new System.Drawing.Point(14, 334);
             this.listHosts.Name = "listHosts";
-            this.listHosts.Size = new System.Drawing.Size(840, 222);
+            this.listHosts.Size = new System.Drawing.Size(840, 194);
             this.listHosts.TabIndex = 7;
             this.listHosts.UseCompatibleStateImageBehavior = false;
             this.listHosts.View = System.Windows.Forms.View.Details;
@@ -382,7 +382,7 @@ namespace MQNetScan.Presentation.Pages
             this.miSingleTest.Click += new System.EventHandler(this.OnSingleTestClick);
 
             // btnExport
-            this.btnExport.Location = new System.Drawing.Point(326, 256);
+            this.btnExport.Location = new System.Drawing.Point(14, 298);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(110, 24);
             this.btnExport.TabIndex = 8;
@@ -392,7 +392,7 @@ namespace MQNetScan.Presentation.Pages
 
             // btnOpenReportFolder
             this.btnOpenReportFolder.Enabled = false;
-            this.btnOpenReportFolder.Location = new System.Drawing.Point(444, 256);
+            this.btnOpenReportFolder.Location = new System.Drawing.Point(132, 298);
             this.btnOpenReportFolder.Name = "btnOpenReportFolder";
             this.btnOpenReportFolder.Size = new System.Drawing.Size(130, 24);
             this.btnOpenReportFolder.TabIndex = 9;

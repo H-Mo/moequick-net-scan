@@ -20,6 +20,8 @@ namespace MQNetScan.Tests
             TestGatewayProxyFilter();
             TestSelfIpFilter();
             TestDefaultRolesRoundTripShape();
+            TestDetectionEvidence();
+            TestAdditionalRoleNames();
             TestNewIniRoleFormat();
             TestLegacyIniMigration();
         }
@@ -164,6 +166,45 @@ namespace MQNetScan.Tests
             TestRunner.AssertTrue(ContainsRole(roles, "打印机", "515,631,9100"), "打印机含 3 端口");
             TestRunner.AssertTrue(ContainsRole(roles, "电子秤", "3000,4001,5000,8000"), "电子秤含 4 端口");
             TestRunner.AssertTrue(ContainsRole(roles, "安卓设备", "5555"), "安卓设备含 5555");
+        }
+
+        private static void TestDetectionEvidence()
+        {
+            Console.WriteLine();
+            Console.WriteLine("[S13-10] 设备类别可信度与识别依据");
+            TestRunner.BeginCase("Android、Windows、打印机类别可解释");
+
+            uint ip = Parse("192.168.1.20");
+            HostRecord android = new HostRecord(ip, "", new int[] { 5555 });
+            android.Role = RolePriority.RoleAndroidDevice;
+            android.Confidence = DeviceConfidence.High;
+            android.Evidence = "端口 5555（ADB）";
+            android.DetectionSource = "Ports";
+            TestRunner.AssertEqual(DeviceConfidence.High, android.Confidence, "安卓设备高可信");
+            TestRunner.AssertTrue(android.Evidence.IndexOf("5555") >= 0, "安卓证据含端口");
+
+            HostRecord unknown = new HostRecord(ip, "", new int[0]);
+            TestRunner.AssertEqual(DeviceConfidence.Unknown, unknown.Confidence, "未知设备可信度未知");
+            TestRunner.AssertTrue(unknown.Evidence.Length == 0, "初始无识别依据");
+        }
+
+        private static uint Parse(string text)
+        {
+            uint value;
+            Ipv4Util.TryParse(text, out value);
+            return value;
+        }
+
+        private static void TestAdditionalRoleNames()
+        {
+            Console.WriteLine();
+            Console.WriteLine("[S13-11] 扩展设备类别名称");
+            TestRunner.BeginCase("Apple、电视、路由器和 IoT 类别可配置");
+            TestRunner.AssertTrue(RolePriority.RoleAppleDevice.Length > 0, "Apple 类别名称非空");
+            TestRunner.AssertTrue(RolePriority.RoleDisplayDevice.Length > 0, "电视类别名称非空");
+            TestRunner.AssertTrue(RolePriority.RoleRouter.Length > 0, "路由器类别名称非空");
+            TestRunner.AssertTrue(RolePriority.RoleIotDevice.Length > 0, "IoT 类别名称非空");
+            TestRunner.AssertEqual(RolePriority.Custom, RolePriority.GetPriority(RolePriority.RoleAppleDevice), "未启用特征时扩展类别按自定义优先级");
         }
 
         private static void TestNewIniRoleFormat()

@@ -71,6 +71,7 @@
     <Compile Include="Engine\Contracts\Dto.cs" />
     <Compile Include="Engine\Contracts\Enums.cs" />
     <Compile Include="Engine\Contracts\Interfaces.cs" />
+    <Compile Include="Engine\Discovery\ProtocolDiscovery.cs" />
     <Compile Include="Engine\GatewayProber.cs" />
     <Compile Include="Engine\Ipv4Util.cs" />
     <Compile Include="Engine\NetSegment.cs" />
