@@ -450,18 +450,25 @@ function New-PortableReleaseZip {
         Copy-Item $source $packageDir -Force
     }
 
-    $readme = Join-Path $Root 'README.md'
-    if (-not (Test-Path $readme)) { throw "README 不存在：$readme" }
-    Copy-Item $readme $packageDir -Force
-
-    $docs = Join-Path $OutDir 'doc'
-    if (Test-Path $docs) { Copy-Item $docs (Join-Path $packageDir 'doc') -Recurse -Force }
-
     if (Test-Path $zipPath) { Remove-Item $zipPath -Force }
     Compress-Archive -Path (Join-Path $packageDir '*') -DestinationPath $zipPath -CompressionLevel Optimal
 
     $zip = Get-Item $zipPath
-    Write-Ok ("Portable release ZIP created: {0} ({1:N0} KB)" -f $zip.FullName, ($zip.Length / 1KB))
+    Add-Type -AssemblyName System.IO.Compression.FileSystem
+    $archive = [System.IO.Compression.ZipFile]::OpenRead($zipPath)
+    try {
+        $entries = @($archive.Entries | ForEach-Object { $_.FullName })
+        $allowed = @('MQNetScan.exe', 'MQNetScan.exe.config')
+        $unexpected = @($entries | Where-Object { $allowed -notcontains $_ })
+        $missing = @($allowed | Where-Object { $entries -notcontains $_ })
+        if ($unexpected.Count -gt 0 -or $missing.Count -gt 0) {
+            throw ("Release ZIP 内容错误。Unexpected=[{0}] Missing=[{1}]" -f `
+                ($unexpected -join ', '), ($missing -join ', '))
+        }
+    }
+    finally { $archive.Dispose() }
+
+    Write-Ok ("Portable release ZIP created: {0} ({1:N0} KB; exe + config only)" -f $zip.FullName, ($zip.Length / 1KB))
     Remove-Item $stageRoot -Recurse -Force
 }
 
