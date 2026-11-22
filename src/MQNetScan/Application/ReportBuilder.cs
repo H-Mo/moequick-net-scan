@@ -19,6 +19,9 @@ namespace MQNetScan.Application
         /// <summary>源网卡描述。</summary>
         public string AdapterText;
 
+        /// <summary>探测方式（ARP / ICMP Ping）。</summary>
+        public string ProbeModeText;
+
         /// <summary>本机地址。</summary>
         public string LocalIpText;
 
@@ -103,6 +106,7 @@ namespace MQNetScan.Application
 
             AppendField(sb, "生成时间", input.GeneratedAt.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
             AppendField(sb, "扫描范围", Safe(input.TargetText));
+            AppendField(sb, "探测方式", Safe(input.ProbeModeText));
             AppendField(sb, "源网卡", Safe(input.AdapterText));
             AppendField(sb, "本机地址", Safe(input.LocalIpText));
             AppendField(sb, "扫描参数", "并发 " + input.Concurrency

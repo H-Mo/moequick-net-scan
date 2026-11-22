@@ -76,6 +76,7 @@
     <Compile Include="Engine\NetSegment.cs" />
     <Compile Include="Engine\Ping3Tester.cs" />
     <Compile Include="Engine\PortProber.cs" />
+    <Compile Include="Engine\PingProber.cs" />
     <Compile Include="Engine\ProgressTracker.cs" />
     <Compile Include="Engine\ResultQueue.cs" />
     <Compile Include="Engine\RoleResolver.cs" />

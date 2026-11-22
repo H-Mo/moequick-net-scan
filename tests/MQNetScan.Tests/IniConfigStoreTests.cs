@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using MQNetScan.Infrastructure;
+using MQNetScan.Engine.Contracts;
 
 namespace MQNetScan.Tests
 {
@@ -24,7 +25,8 @@ namespace MQNetScan.Tests
                 Directory.CreateDirectory(_tempDir);
 
                 TestMissingFileGeneratesDefaults();
-                TestRoundTrip();
+                    TestRoundTrip();
+                TestProbeModeSettingsRoundTrip();
                 TestInvalidValuesFallback();
                 TestBrokenFileDoesNotThrow();
                 TestReadOnlyDirectory();
@@ -110,6 +112,33 @@ namespace MQNetScan.Tests
         // -------------------------------------------------------------------
         // FR-4.3.3：键值非法时逐项回退默认值
         // -------------------------------------------------------------------
+        private static void TestProbeModeSettingsRoundTrip()
+        {
+            Console.WriteLine();
+            Console.WriteLine("[PING-INI] 探测模式参数往返和旧配置默认值");
+            TestRunner.BeginCase("Ping 设置保存读回，缺键旧配置默认 ARP");
+
+            string path = NewPath("probe-mode.ini");
+            AppSettings settings = new AppSettings();
+            settings.LastProbeMode = (int)ProbeMode.Ping;
+            settings.PingTimeoutMs = 1200;
+            settings.PingRetry = 2;
+            string error;
+            TestRunner.AssertTrue(SettingsService.Save(settings, path, out error), "Ping 设置保存成功");
+
+            ConfigLoadResult loaded = SettingsService.Load(path);
+            TestRunner.AssertEqual((int)ProbeMode.Ping, loaded.Settings.LastProbeMode, "模式往返一致");
+            TestRunner.AssertEqual(1200, loaded.Settings.PingTimeoutMs, "Ping 超时往返一致");
+            TestRunner.AssertEqual(2, loaded.Settings.PingRetry, "Ping 次数往返一致");
+
+            string oldPath = NewPath("old-probe.ini");
+            File.WriteAllText(oldPath, "[General]\r\nMaxConcurrency=32\r\n", new UTF8Encoding(false));
+            ConfigLoadResult old = SettingsService.Load(oldPath);
+            TestRunner.AssertEqual((int)ProbeMode.Arp, old.Settings.LastProbeMode, "旧配置默认 ARP");
+            TestRunner.AssertEqual(IniSchema.DefaultPingTimeoutMs, old.Settings.PingTimeoutMs, "旧配置 Ping 超时用默认值");
+            TestRunner.AssertEqual(IniSchema.DefaultPingRetry, old.Settings.PingRetry, "旧配置 Ping 次数用默认值");
+        }
+
         private static void TestInvalidValuesFallback()
         {
             Console.WriteLine();

@@ -59,7 +59,7 @@ namespace MQNetScan.Presentation
             _settings = result.Settings;
 
             settingsPage.BindSettings(_settings, _configPath);
-            scanPage.Initialize(_settings.LastNetSegment, _settings);
+            scanPage.Initialize(_settings.LastNetSegment, _settings, _configPath);
             toolsPage.Initialize(_settings, scanPage.CurrentAdapter);
 
             // 首次运行（或 ini 被删除）：立即生成默认配置文件（PRD FR-4.3.2）

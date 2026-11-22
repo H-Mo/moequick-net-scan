@@ -63,6 +63,7 @@
     <Compile Include="IniRoundTripRegressionTests.cs" />
     <Compile Include="ListViewEndToEndTests.cs" />
     <Compile Include="PortProberTests.cs" />
+    <Compile Include="PingProberTests.cs" />
     <Compile Include="RoleEndToEndTests.cs" />
     <Compile Include="ContextMenuTests.cs" />
     <Compile Include="ReportBuilderTests.cs" />

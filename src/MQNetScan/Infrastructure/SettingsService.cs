@@ -51,6 +51,9 @@ namespace MQNetScan.Infrastructure
         public string SaasDomain;
         public string DnsProbeIp;
         public string GatewayProbePorts;
+        public int LastProbeMode;
+        public int PingTimeoutMs;
+        public int PingRetry;
         public List<RoleDefinition> Roles;
 
         /// <summary>兼容旧代码的展开视图；新代码应使用 Roles。</summary>
@@ -108,6 +111,9 @@ namespace MQNetScan.Infrastructure
             SaasDomain = IniSchema.DefaultSaasDomain;
             DnsProbeIp = IniSchema.DefaultDnsProbeIp;
             GatewayProbePorts = IniSchema.DefaultGatewayProbePorts;
+            LastProbeMode = (int)ProbeMode.Arp;
+            PingTimeoutMs = IniSchema.DefaultPingTimeoutMs;
+            PingRetry = IniSchema.DefaultPingRetry;
             Roles = IniSchema.CreateDefaultRoles();
         }
 
@@ -184,6 +190,15 @@ namespace MQNetScan.Infrastructure
                 settings.ConfirmAboveHosts = store.GetInt(
                     IniSchema.SectionScan, IniSchema.KeyConfirmAboveHosts,
                     IniSchema.DefaultConfirmAboveHosts, 1, 65535);
+
+                settings.LastProbeMode = store.GetInt(IniSchema.SectionScan,
+                    IniSchema.KeyLastProbeMode, (int)ProbeMode.Arp, (int)ProbeMode.Arp, (int)ProbeMode.Ping);
+                settings.PingTimeoutMs = store.GetInt(IniSchema.SectionScan,
+                    IniSchema.KeyPingTimeoutMs, IniSchema.DefaultPingTimeoutMs,
+                    IniSchema.PingTimeoutMinMs, IniSchema.PingTimeoutMaxMs);
+                settings.PingRetry = store.GetInt(IniSchema.SectionScan,
+                    IniSchema.KeyPingRetry, IniSchema.DefaultPingRetry,
+                    IniSchema.PingRetryMin, IniSchema.PingRetryMax);
 
                 settings.SendArpRetry = store.GetInt(
                     IniSchema.SectionProbe, IniSchema.KeySendArpRetry,
@@ -411,6 +426,9 @@ namespace MQNetScan.Infrastructure
 
                 store.Set(IniSchema.SectionScan, IniSchema.KeyLastNetSegment, settings.LastNetSegment);
                 store.SetInt(IniSchema.SectionScan, IniSchema.KeyConfirmAboveHosts, settings.ConfirmAboveHosts);
+                store.SetInt(IniSchema.SectionScan, IniSchema.KeyLastProbeMode, settings.LastProbeMode);
+                store.SetInt(IniSchema.SectionScan, IniSchema.KeyPingTimeoutMs, settings.PingTimeoutMs);
+                store.SetInt(IniSchema.SectionScan, IniSchema.KeyPingRetry, settings.PingRetry);
 
                 store.SetInt(IniSchema.SectionProbe, IniSchema.KeySendArpRetry, settings.SendArpRetry);
 

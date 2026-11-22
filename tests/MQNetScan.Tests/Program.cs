@@ -31,6 +31,7 @@ namespace MQNetScan.Tests
                 IniRoundTripRegressionTests.Run();
                 ListViewEndToEndTests.Run();
                 PortProberTests.Run();
+                PingProberTests.Run();
                 RoleEndToEndTests.Run();
                 ContextMenuTests.Run();
                 ReportBuilderTests.Run();

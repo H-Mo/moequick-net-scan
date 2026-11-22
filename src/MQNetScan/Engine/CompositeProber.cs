@@ -21,7 +21,9 @@ namespace MQNetScan.Engine
     /// </summary>
     internal sealed class CompositeProber : IHostProber
     {
+        private readonly IHostProber _livenessProber;
         private readonly ArpProber _arpProber;
+        private readonly bool _hasMacEvidence;
         private readonly IList<RoleDefinition> _roles;
         private readonly ConflictDetector _conflictDetector;
 
@@ -79,12 +81,23 @@ namespace MQNetScan.Engine
         /// </param>
         public CompositeProber(ArpProber arpProber, IList<RoleDefinition> roles,
             ConflictDetector conflictDetector, uint localAddress, string gatewayMac)
+            : this(arpProber, roles, conflictDetector, localAddress, gatewayMac, ProbeMode.Arp, null)
+        {
+        }
+
+        public CompositeProber(ArpProber arpProber, IList<RoleDefinition> roles,
+            ConflictDetector conflictDetector, uint localAddress, string gatewayMac,
+            ProbeMode probeMode, IHostProber pingProber)
         {
             _arpProber = arpProber == null ? new ArpProber() : arpProber;
             _roles = roles;
             _conflictDetector = conflictDetector;
             _localAddress = localAddress;
             _gatewayMac = NormalizeMac(gatewayMac);
+            _hasMacEvidence = probeMode == ProbeMode.Arp;
+            _livenessProber = pingProber != null
+                ? pingProber
+                : (_hasMacEvidence ? (IHostProber)_arpProber : (IHostProber)new PingProber());
         }
 
         private readonly uint _localAddress;
@@ -116,8 +129,8 @@ namespace MQNetScan.Engine
                 return null;
             }
 
-            // ---- 1. ARP 存活判定 ----
-            HostRecord alive = _arpProber.Probe(address, parameters, shouldContinue);
+            // ---- 1. 按用户选择的方式判定存活 ----
+            HostRecord alive = _livenessProber.Probe(address, parameters, shouldContinue);
 
             if (alive == null) { return null; }   // 无响应：不入列表（PRD FR-1.2.2）
 
@@ -129,7 +142,8 @@ namespace MQNetScan.Engine
             //
             // 识别依据：返回的 MAC 等于默认网关 MAC，但该 IP 又不是网关本身。
             // 真实设备不可能恰好拥有网关的 MAC，因此这个判据是安全的。
-            if (_gatewayMac.Length > 0
+            if (_hasMacEvidence
+                && _gatewayMac.Length > 0
                 && NormalizeMac(alive.MacAddress) == _gatewayMac
                 && _gatewayMac != "00:00:00:00:00:00")
             {
@@ -140,7 +154,7 @@ namespace MQNetScan.Engine
             // ---- 2. IP 冲突观测（PRD FR-1.5.2）----
             bool conflicted = false;
 
-            if (_conflictDetector != null)
+            if (_hasMacEvidence && _conflictDetector != null)
             {
                 string conflictMessage;
 

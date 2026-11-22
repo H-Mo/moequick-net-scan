@@ -78,6 +78,8 @@ namespace MQNetScan.Presentation.Pages
             {
                 numConcurrency.Value = Clamp(settings.MaxConcurrency, 16, 128);
                 numTimeout.Value = Clamp(settings.PortTimeoutMs, 200, 5000);
+                numPingTimeout.Value = Clamp(settings.PingTimeoutMs, IniSchema.PingTimeoutMinMs, IniSchema.PingTimeoutMaxMs);
+                numPingRetry.Value = Clamp(settings.PingRetry, IniSchema.PingRetryMin, IniSchema.PingRetryMax);
             }
             finally
             {
@@ -310,6 +312,9 @@ namespace MQNetScan.Presentation.Pages
             _settings.SaasDomain = fresh.SaasDomain;
             _settings.DnsProbeIp = fresh.DnsProbeIp;
             _settings.GatewayProbePorts = fresh.GatewayProbePorts;
+            _settings.LastProbeMode = fresh.LastProbeMode;
+            _settings.PingTimeoutMs = fresh.PingTimeoutMs;
+            _settings.PingRetry = fresh.PingRetry;
             _settings.Roles = fresh.Roles;
 
             // 回显控件
@@ -318,6 +323,8 @@ namespace MQNetScan.Presentation.Pages
             {
                 numConcurrency.Value = fresh.MaxConcurrency;
                 numTimeout.Value = fresh.PortTimeoutMs;
+                numPingTimeout.Value = fresh.PingTimeoutMs;
+                numPingRetry.Value = fresh.PingRetry;
             }
             finally
             {
@@ -374,6 +381,8 @@ namespace MQNetScan.Presentation.Pages
 
             _settings.MaxConcurrency = concurrency;
             _settings.PortTimeoutMs = timeout;
+            _settings.PingTimeoutMs = (int)numPingTimeout.Value;
+            _settings.PingRetry = (int)numPingRetry.Value;
 
             string error;
             bool ok = SettingsService.Save(_settings, _configPath, out error);

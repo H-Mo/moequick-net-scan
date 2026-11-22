@@ -196,16 +196,34 @@ namespace MQNetScan.Engine.Contracts
         private readonly int _concurrency;
         private readonly int _portTimeoutMs;
         private readonly int _arpRetry;
+        private readonly int _pingTimeoutMs;
+        private readonly int _pingRetry;
         private readonly int[] _enabledPorts;
+        private readonly ProbeMode _probeMode;
         private readonly uint[] _targets;
 
         public ScanParameters(uint[] targets, int concurrency, int portTimeoutMs, int arpRetry, int[] enabledPorts)
+            : this(targets, concurrency, portTimeoutMs, arpRetry, enabledPorts, ProbeMode.Arp, 800, 1)
+        {
+        }
+
+        public ScanParameters(uint[] targets, int concurrency, int portTimeoutMs, int arpRetry,
+            int[] enabledPorts, ProbeMode probeMode, int pingTimeoutMs)
+            : this(targets, concurrency, portTimeoutMs, arpRetry, enabledPorts, probeMode, pingTimeoutMs, 1)
+        {
+        }
+
+        public ScanParameters(uint[] targets, int concurrency, int portTimeoutMs, int arpRetry,
+            int[] enabledPorts, ProbeMode probeMode, int pingTimeoutMs, int pingRetry)
         {
             _targets = targets == null ? new uint[0] : targets;
             _concurrency = concurrency;
             _portTimeoutMs = portTimeoutMs;
             _arpRetry = arpRetry;
             _enabledPorts = enabledPorts == null ? new int[0] : enabledPorts;
+            _probeMode = probeMode;
+            _pingTimeoutMs = pingTimeoutMs < 1 ? 800 : pingTimeoutMs;
+            _pingRetry = pingRetry < 1 ? 1 : (pingRetry > 3 ? 3 : pingRetry);
         }
 
         /// <summary>目标地址列表（不可变）。</summary>
@@ -219,6 +237,15 @@ namespace MQNetScan.Engine.Contracts
 
         /// <summary>ARP 重试次数。</summary>
         public int ArpRetry { get { return _arpRetry; } }
+
+        /// <summary>本次存活探测方式。</summary>
+        public ProbeMode ProbeMode { get { return _probeMode; } }
+
+        /// <summary>ICMP Ping 单次超时（毫秒）。</summary>
+        public int PingTimeoutMs { get { return _pingTimeoutMs; } }
+
+        /// <summary>ICMP Ping 尝试次数（1~3）。</summary>
+        public int PingRetry { get { return _pingRetry; } }
 
         /// <summary>启用的特征端口（已去重升序）。</summary>
         public int[] EnabledPorts { get { return _enabledPorts; } }

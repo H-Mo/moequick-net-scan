@@ -40,6 +40,9 @@ namespace MQNetScan.Infrastructure
         // -------------------------------------------------------------------
         public const string KeyLastNetSegment = "LastNetSegment";
         public const string KeyConfirmAboveHosts = "ConfirmAboveHosts";
+        public const string KeyLastProbeMode = "LastProbeMode";
+        public const string KeyPingTimeoutMs = "PingTimeoutMs";
+        public const string KeyPingRetry = "PingRetry";
 
         // -------------------------------------------------------------------
         // [Probe]
@@ -76,6 +79,10 @@ namespace MQNetScan.Infrastructure
         public const int TimeoutMaxMs = 5000;
         public const int SendArpRetryMin = 1;
         public const int SendArpRetryMax = 3;
+        public const int PingTimeoutMinMs = 200;
+        public const int PingTimeoutMaxMs = 5000;
+        public const int PingRetryMin = 1;
+        public const int PingRetryMax = 3;
 
         /// <summary>并发数超过此值时提示“配置较低的电脑建议不超过 32”（PRD 风险 R3）。</summary>
         public const int ConcurrencyWarnThreshold = 64;
@@ -89,6 +96,8 @@ namespace MQNetScan.Infrastructure
         public const string DefaultLastNetSegment = "";
         public const int DefaultConfirmAboveHosts = 254;
         public const int DefaultSendArpRetry = 1;
+        public const int DefaultPingTimeoutMs = 800;
+        public const int DefaultPingRetry = 1;
         public const bool DefaultSaveToDesktop = true;
         public const string DefaultTimestampFormat = "yyyyMMdd_HHmmss";
 

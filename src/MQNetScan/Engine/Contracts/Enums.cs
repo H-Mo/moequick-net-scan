@@ -22,6 +22,13 @@ namespace MQNetScan.Engine.Contracts
         Completed = 4
     }
 
+    /// <summary>设备存活探测方式。</summary>
+    internal enum ProbeMode
+    {
+        Arp = 0,
+        Ping = 1
+    }
+
     /// <summary>
     /// 告警种类。
     /// </summary>

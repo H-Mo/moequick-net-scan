@@ -13,6 +13,11 @@ namespace MQNetScan.Presentation.Pages
         private System.Windows.Forms.Button btnRefreshAdapter;
         private System.Windows.Forms.RadioButton rbCidr;
         private System.Windows.Forms.RadioButton rbRange;
+        private System.Windows.Forms.Label lblProbeMode;
+        private System.Windows.Forms.Panel pnlProbeMode;
+        private System.Windows.Forms.RadioButton rbProbeArp;
+        private System.Windows.Forms.RadioButton rbProbePing;
+        private System.Windows.Forms.Label lblProbeHint;
         private System.Windows.Forms.TextBox txtCidr;
         private System.Windows.Forms.TextBox txtRangeStart;
         private System.Windows.Forms.Label lblRangeSep;
@@ -49,6 +54,11 @@ namespace MQNetScan.Presentation.Pages
             this.btnRefreshAdapter = new System.Windows.Forms.Button();
             this.rbCidr = new System.Windows.Forms.RadioButton();
             this.rbRange = new System.Windows.Forms.RadioButton();
+            this.lblProbeMode = new System.Windows.Forms.Label();
+            this.pnlProbeMode = new System.Windows.Forms.Panel();
+            this.rbProbeArp = new System.Windows.Forms.RadioButton();
+            this.rbProbePing = new System.Windows.Forms.RadioButton();
+            this.lblProbeHint = new System.Windows.Forms.Label();
             this.txtCidr = new System.Windows.Forms.TextBox();
             this.txtRangeStart = new System.Windows.Forms.TextBox();
             this.lblRangeSep = new System.Windows.Forms.Label();
@@ -81,6 +91,8 @@ namespace MQNetScan.Presentation.Pages
 
             // grpTarget
             this.grpTarget.Controls.Add(this.lblValidation);
+            this.grpTarget.Controls.Add(this.pnlProbeMode);
+            this.grpTarget.Controls.Add(this.lblProbeMode);
             this.grpTarget.Controls.Add(this.lblPreview);
             this.grpTarget.Controls.Add(this.txtRangeEnd);
             this.grpTarget.Controls.Add(this.lblRangeSep);
@@ -93,7 +105,7 @@ namespace MQNetScan.Presentation.Pages
             this.grpTarget.Controls.Add(this.lblAdapter);
             this.grpTarget.Location = new System.Drawing.Point(14, 10);
             this.grpTarget.Name = "grpTarget";
-            this.grpTarget.Size = new System.Drawing.Size(840, 168);
+            this.grpTarget.Size = new System.Drawing.Size(840, 190);
             this.grpTarget.TabIndex = 0;
             this.grpTarget.TabStop = false;
             this.grpTarget.Text = "扫描目标";
@@ -177,16 +189,62 @@ namespace MQNetScan.Presentation.Pages
             this.txtRangeEnd.TabIndex = 8;
             this.txtRangeEnd.TextChanged += new System.EventHandler(this.OnTargetTextChanged);
 
+            // lblProbeMode
+            this.lblProbeMode.AutoSize = true;
+            this.lblProbeMode.Location = new System.Drawing.Point(18, 91);
+            this.lblProbeMode.Name = "lblProbeMode";
+            this.lblProbeMode.Size = new System.Drawing.Size(65, 12);
+            this.lblProbeMode.TabIndex = 11;
+            this.lblProbeMode.Text = "探测方式：";
+
+            // pnlProbeMode
+            this.pnlProbeMode.Location = new System.Drawing.Point(95, 85);
+            this.pnlProbeMode.Name = "pnlProbeMode";
+            this.pnlProbeMode.Size = new System.Drawing.Size(115, 24);
+            this.pnlProbeMode.TabIndex = 12;
+            this.pnlProbeMode.Controls.Add(this.rbProbePing);
+            this.pnlProbeMode.Controls.Add(this.rbProbeArp);
+
+            // rbProbeArp
+            this.rbProbeArp.AutoSize = true;
+            this.rbProbeArp.Checked = true;
+            this.rbProbeArp.Location = new System.Drawing.Point(0, 4);
+            this.rbProbeArp.Name = "rbProbeArp";
+            this.rbProbeArp.Size = new System.Drawing.Size(47, 16);
+            this.rbProbeArp.TabIndex = 0;
+            this.rbProbeArp.TabStop = true;
+            this.rbProbeArp.Text = "ARP";
+            this.rbProbeArp.UseVisualStyleBackColor = true;
+            this.rbProbeArp.CheckedChanged += new System.EventHandler(this.OnProbeModeChanged);
+
+            // rbProbePing
+            this.rbProbePing.AutoSize = true;
+            this.rbProbePing.Location = new System.Drawing.Point(58, 4);
+            this.rbProbePing.Name = "rbProbePing";
+            this.rbProbePing.Size = new System.Drawing.Size(47, 16);
+            this.rbProbePing.TabIndex = 1;
+            this.rbProbePing.Text = "Ping";
+            this.rbProbePing.UseVisualStyleBackColor = true;
+            this.rbProbePing.CheckedChanged += new System.EventHandler(this.OnProbeModeChanged);
+
+            // lblProbeHint
+            this.lblProbeHint.AutoSize = true;
+            this.lblProbeHint.ForeColor = System.Drawing.Color.FromArgb(100, 100, 100);
+            this.lblProbeHint.Location = new System.Drawing.Point(220, 91);
+            this.lblProbeHint.Name = "lblProbeHint";
+            this.lblProbeHint.Size = new System.Drawing.Size(0, 12);
+            this.lblProbeHint.TabIndex = 14;
+
             // lblPreview
             this.lblPreview.AutoSize = true;
-            this.lblPreview.Location = new System.Drawing.Point(18, 92);
+            this.lblPreview.Location = new System.Drawing.Point(18, 116);
             this.lblPreview.Name = "lblPreview";
             this.lblPreview.Size = new System.Drawing.Size(0, 12);
             this.lblPreview.TabIndex = 9;
 
             // lblValidation
             this.lblValidation.AutoSize = true;
-            this.lblValidation.Location = new System.Drawing.Point(18, 118);
+            this.lblValidation.Location = new System.Drawing.Point(18, 142);
             this.lblValidation.MaximumSize = new System.Drawing.Size(800, 0);
             this.lblValidation.Name = "lblValidation";
             this.lblValidation.Size = new System.Drawing.Size(0, 12);
@@ -195,14 +253,14 @@ namespace MQNetScan.Presentation.Pages
             // lblAdapterWarning（放在分组框外，独立一行，避免压住边框）
             this.lblAdapterWarning.AutoSize = true;
             this.lblAdapterWarning.ForeColor = System.Drawing.Color.FromArgb(180, 100, 0);
-            this.lblAdapterWarning.Location = new System.Drawing.Point(18, 188);
+            this.lblAdapterWarning.Location = new System.Drawing.Point(18, 210);
             this.lblAdapterWarning.MaximumSize = new System.Drawing.Size(840, 0);
             this.lblAdapterWarning.Name = "lblAdapterWarning";
             this.lblAdapterWarning.Size = new System.Drawing.Size(0, 12);
             this.lblAdapterWarning.TabIndex = 1;
 
             // btnStartScan
-            this.btnStartScan.Location = new System.Drawing.Point(14, 216);
+            this.btnStartScan.Location = new System.Drawing.Point(14, 238);
             this.btnStartScan.Name = "btnStartScan";
             this.btnStartScan.Size = new System.Drawing.Size(104, 30);
             this.btnStartScan.TabIndex = 2;
@@ -212,7 +270,7 @@ namespace MQNetScan.Presentation.Pages
 
             // btnPause
             this.btnPause.Enabled = false;
-            this.btnPause.Location = new System.Drawing.Point(126, 216);
+            this.btnPause.Location = new System.Drawing.Point(126, 238);
             this.btnPause.Name = "btnPause";
             this.btnPause.Size = new System.Drawing.Size(88, 30);
             this.btnPause.TabIndex = 3;
@@ -222,7 +280,7 @@ namespace MQNetScan.Presentation.Pages
 
             // btnStop
             this.btnStop.Enabled = false;
-            this.btnStop.Location = new System.Drawing.Point(222, 216);
+            this.btnStop.Location = new System.Drawing.Point(222, 238);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(88, 30);
             this.btnStop.TabIndex = 4;
@@ -231,7 +289,7 @@ namespace MQNetScan.Presentation.Pages
             this.btnStop.Click += new System.EventHandler(this.OnStopClick);
 
             // progressBar
-            this.progressBar.Location = new System.Drawing.Point(326, 220);
+            this.progressBar.Location = new System.Drawing.Point(326, 242);
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(528, 22);
             this.progressBar.TabIndex = 5;
@@ -239,7 +297,7 @@ namespace MQNetScan.Presentation.Pages
             // lblScanStatus
             this.lblScanStatus.AutoSize = true;
             this.lblScanStatus.ForeColor = System.Drawing.Color.FromArgb(90, 90, 90);
-            this.lblScanStatus.Location = new System.Drawing.Point(14, 256);
+            this.lblScanStatus.Location = new System.Drawing.Point(14, 278);
             this.lblScanStatus.MaximumSize = new System.Drawing.Size(840, 0);
             this.lblScanStatus.Name = "lblScanStatus";
             this.lblScanStatus.Size = new System.Drawing.Size(0, 12);
@@ -257,9 +315,9 @@ namespace MQNetScan.Presentation.Pages
             this.listHosts.FullRowSelect = true;
             this.listHosts.GridLines = true;
             this.listHosts.HideSelection = false;
-            this.listHosts.Location = new System.Drawing.Point(14, 284);
+            this.listHosts.Location = new System.Drawing.Point(14, 306);
             this.listHosts.Name = "listHosts";
-            this.listHosts.Size = new System.Drawing.Size(840, 244);
+            this.listHosts.Size = new System.Drawing.Size(840, 222);
             this.listHosts.TabIndex = 7;
             this.listHosts.UseCompatibleStateImageBehavior = false;
             this.listHosts.View = System.Windows.Forms.View.Details;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Windows.Forms;
 using MQNetScan.Engine;
+using MQNetScan.Engine.Contracts;
 using MQNetScan.Infrastructure;
 using MQNetScan.Presentation.Pages;
 
@@ -22,6 +23,7 @@ namespace MQNetScan.Tests
             TestButtonStateMachine();
             TestCidrInputValidation();
             TestRangeModeToggle();
+            TestProbeModeToggle();
             TestLargeScanConfirmationGate();
         }
 
@@ -257,6 +259,34 @@ namespace MQNetScan.Tests
         // -------------------------------------------------------------------
         // 确认门槛：HostCount 决定是否弹框（不实际弹出 MessageBox）
         // -------------------------------------------------------------------
+        private static void TestProbeModeToggle()
+        {
+            Console.WriteLine();
+            Console.WriteLine("[S3-6] ARP / Ping 探测方式选择");
+            TestRunner.BeginCase("默认 ARP，切换 Ping 后保存选择");
+
+            using (ScanPage page = CreateInitializedPage())
+            {
+                RadioButton arp = (RadioButton)GetField(page, "rbProbeArp");
+                RadioButton ping = (RadioButton)GetField(page, "rbProbePing");
+                TestRunner.AssertTrue(arp.Checked, "默认 ARP 模式");
+                TestRunner.AssertTrue(!ping.Checked, "Ping 初始未选中");
+
+                ping.Checked = true;
+                InvokePrivate(page, "OnProbeModeChanged", ping, EventArgs.Empty);
+
+                TestRunner.AssertEqual((int)ProbeMode.Ping, page.CurrentProbeModeValue,
+                    "当前模式切换为 Ping");
+                TestRunner.AssertEqual((int)ProbeMode.Ping,
+                    ((AppSettings)GetField(page, "_settings")).LastProbeMode,
+                    "选择保存到设置模型");
+
+                Label hint = (Label)GetField(page, "lblProbeHint");
+                TestRunner.AssertTrue(hint.Text.IndexOf("无 MAC") >= 0,
+                    "Ping 说明提示无 MAC 及 ICMP 限制");
+            }
+        }
+
         private static void TestLargeScanConfirmationGate()
         {
             Console.WriteLine();

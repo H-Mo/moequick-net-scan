@@ -37,6 +37,7 @@ namespace MQNetScan.Presentation.Pages
 
         private ScanSession _session;
         private AppSettings _settings;
+        private string _settingsPath = "";
         private Timer _refreshTimer;
         private UiDispatcher _dispatcher;
         private bool _sortColumnSet;
@@ -64,6 +65,7 @@ namespace MQNetScan.Presentation.Pages
 
         /// <summary>本次扫描的最终状态描述（供报告使用）。</summary>
         private string _finalStateText = "";
+        private ProbeMode _currentProbeMode = ProbeMode.Arp;
 
         /// <summary>本次扫描的 IP 冲突检测器（供收尾时汇总告警）。</summary>
         private ConflictDetector _conflictDetector;
@@ -88,6 +90,9 @@ namespace MQNetScan.Presentation.Pages
             _dispatcher = new UiDispatcher(listHosts);
 
             HookListViewEvents();
+            _currentProbeMode = ProbeMode.Arp;
+            UpdateProbeModeHint();
+            ApplyTargetModeControls();
 
             SetScanStatus("");
             SetProgress(0);
@@ -469,8 +474,27 @@ namespace MQNetScan.Presentation.Pages
         /// </summary>
         public void Initialize(string lastNetSegment, AppSettings settings)
         {
+            Initialize(lastNetSegment, settings, SettingsService.ResolveConfigPath());
+        }
+
+        public void Initialize(string lastNetSegment, AppSettings settings, string configPath)
+        {
             _lastNetSegment = lastNetSegment == null ? "" : lastNetSegment;
             _settings = settings;
+            _settingsPath = configPath == null ? "" : configPath;
+            _currentProbeMode = settings == null || settings.LastProbeMode == (int)ProbeMode.Arp
+                ? ProbeMode.Arp : ProbeMode.Ping;
+            _suppressEvents = true;
+            try
+            {
+                rbProbeArp.Checked = _currentProbeMode == ProbeMode.Arp;
+                rbProbePing.Checked = _currentProbeMode == ProbeMode.Ping;
+            }
+            finally
+            {
+                _suppressEvents = false;
+            }
+            UpdateProbeModeHint();
             ReloadAdapters();
         }
 
@@ -592,15 +616,17 @@ namespace MQNetScan.Presentation.Pages
         private void OnModeChanged(object sender, EventArgs e)
         {
             if (_suppressEvents) { return; }
+            ApplyTargetModeControls();
+            Revalidate();
+        }
 
+        private void ApplyTargetModeControls()
+        {
             bool cidrMode = rbCidr.Checked;
-
             txtCidr.Enabled = cidrMode;
             txtRangeStart.Enabled = !cidrMode;
             lblRangeSep.Enabled = !cidrMode;
             txtRangeEnd.Enabled = !cidrMode;
-
-            Revalidate();
         }
 
         private void OnTargetTextChanged(object sender, EventArgs e)
@@ -617,6 +643,8 @@ namespace MQNetScan.Presentation.Pages
 
         /// <summary>当前选中的网卡（供 Tab 2 自检使用）。</summary>
         public AdapterInfo CurrentAdapter { get { return GetSelectedAdapter(); } }
+
+        public int CurrentProbeModeValue { get { return (int)_currentProbeMode; } }
 
         /// <summary>
         /// 重新解析输入并刷新预览与校验提示。
@@ -740,6 +768,42 @@ namespace MQNetScan.Presentation.Pages
         }
 
         // -------------------------------------------------------------------
+        // 探测方式选择
+        // -------------------------------------------------------------------
+        private void OnProbeModeChanged(object sender, EventArgs e)
+        {
+            if (_suppressEvents || _scanning) { return; }
+            if (rbProbeArp == null || rbProbePing == null) { return; }
+
+            _currentProbeMode = rbProbePing.Checked ? ProbeMode.Ping : ProbeMode.Arp;
+            UpdateProbeModeHint();
+
+            if (_settings != null)
+            {
+                _settings.LastProbeMode = (int)_currentProbeMode;
+                string error;
+                string configPath = _settingsPath;
+                if (string.IsNullOrEmpty(configPath)) { configPath = SettingsService.ResolveConfigPath(); }
+                if (!SettingsService.Save(_settings, configPath, out error))
+                {
+                    SetScanStatus("无法保存探测方式：" + error);
+                }
+            }
+
+            RaiseNotify(_currentProbeMode == ProbeMode.Arp
+                ? "已选择 ARP 探测：适合同一广播域，可获取 MAC 地址。"
+                : "已选择 Ping 探测：适用于路由可达的网段；ICMP 被过滤时可能漏报。", false);
+        }
+
+        private void UpdateProbeModeHint()
+        {
+            if (lblProbeHint == null) { return; }
+            lblProbeHint.Text = _currentProbeMode == ProbeMode.Arp
+                ? "同一广播域，能获取 MAC；跨网段通常不可用。"
+                : "可经路由探测；目标或网络屏蔽 ICMP 时可能漏报，且无 MAC。";
+        }
+
+        // -------------------------------------------------------------------
         // 扫描控制
         // -------------------------------------------------------------------
         private void OnStartScanClick(object sender, EventArgs e)
@@ -788,24 +852,36 @@ namespace MQNetScan.Presentation.Pages
             int[] ports = _settings == null
                 ? new int[0]
                 : _settings.GetEnabledPorts();
+            int pingTimeout = _settings == null ? IniSchema.DefaultPingTimeoutMs : _settings.PingTimeoutMs;
+            int pingRetry = _settings == null ? IniSchema.DefaultPingRetry : _settings.PingRetry;
 
             ScanParameters prm = new ScanParameters(
-                seg.EnumerateHosts(), concurrency, timeout, retry, ports);
+                seg.EnumerateHosts(), concurrency, timeout,
+                _currentProbeMode == ProbeMode.Arp ? retry : pingRetry,
+                ports, _currentProbeMode, pingTimeout, pingRetry);
 
             // S10：接入 IP 冲突检测（先快照扫描前 ARP 表作为基线）
-            ConflictDetector conflictDetector = new ConflictDetector();
-            conflictDetector.CaptureBaseline();
+            ConflictDetector conflictDetector = null;
+            if (_currentProbeMode == ProbeMode.Arp)
+            {
+                conflictDetector = new ConflictDetector();
+                conflictDetector.CaptureBaseline();
+            }
             _conflictDetector = conflictDetector;
 
-            // 网关探测在后台进行，避免阻塞 UI（ARP 对不可达网关要等 3~4 秒）
             AdapterInfo scanAdapter = GetSelectedAdapter();
-            StartGatewayProbeAsync(scanAdapter, timeout);
+            if (_currentProbeMode == ProbeMode.Arp)
+            {
+                // 网关 ARP 探测在后台执行；Ping 模式不做 MAC 证据链告警。
+                StartGatewayProbeAsync(scanAdapter, timeout);
+            }
 
             // 构造探测器：
             //   · localAddress → 本机地址不入结果列表（PRD FR-1.1.7）
             //   · gatewayMac  → 识别"网关代理回应"造成的跨网段假阳性（S13 F1）
             uint localAddress = scanAdapter == null ? 0 : scanAdapter.IpAddress;
-            string gatewayMac = scanAdapter == null ? "" : scanAdapter.GatewayMac;
+            string gatewayMac = scanAdapter == null || _currentProbeMode != ProbeMode.Arp
+                ? "" : scanAdapter.GatewayMac;
 
             IHostProber prober = ProberFactory != null
                 ? ProberFactory()
@@ -813,7 +889,9 @@ namespace MQNetScan.Presentation.Pages
                     _settings == null ? null : _settings.Roles,
                     conflictDetector,
                     localAddress,
-                    gatewayMac);
+                    gatewayMac,
+                    _currentProbeMode,
+                    null);
 
             _session = new ScanSession(prm, null, prober);
 
@@ -1352,6 +1430,8 @@ namespace MQNetScan.Presentation.Pages
 
             input.GeneratedAt = DateTime.Now;
             input.TargetText = _currentTargetText;
+            input.ProbeModeText = _currentProbeMode == ProbeMode.Arp
+                ? "ARP（MAC 地址可用）" : "ICMP Ping（不提供 MAC 地址）";
             input.FinalStateText = _finalStateText;
 
             AdapterInfo adapter = GetSelectedAdapter();

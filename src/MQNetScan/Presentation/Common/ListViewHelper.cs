@@ -78,8 +78,8 @@ namespace MQNetScan.Presentation.Common
             ListViewItem item = new ListViewItem(index.ToString(CultureInfo.InvariantCulture));
 
             item.SubItems.Add(record.IpText);
-            item.SubItems.Add(record.MacAddress);
-            item.SubItems.Add(record.OuiPrefix);
+            item.SubItems.Add(string.IsNullOrEmpty(record.MacAddress) ? "—" : record.MacAddress);
+            item.SubItems.Add(string.IsNullOrEmpty(record.MacAddress) ? "—" : record.OuiPrefix);
             item.SubItems.Add(record.OpenPortsText);
             item.SubItems.Add(record.Role);
             item.SubItems.Add(record.Ping3Text);
