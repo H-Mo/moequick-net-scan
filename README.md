@@ -6,9 +6,11 @@
 
 ## 下载与运行
 
-1. 打开 [GitHub Releases](https://github.com/H-Mo/moequick-net-scan/releases) 下载最新版本的 `MQNetScan.exe`。
-2. 将文件放到你有写入权限的文件夹，例如桌面或“文档”。
-3. 双击运行。首次启动时，程序会在 exe 同一目录创建 `MQNetScan.ini`，用于保存设置。
+1. 打开 [GitHub Releases](https://github.com/H-Mo/moequick-net-scan/releases) 下载 `MQNetScan-v1.1.0.zip`。
+2. 将 ZIP 解压到你有写入权限的文件夹，例如桌面或“文档”。
+3. 打开解压出的 `MQNetScan-v1.1.0` 文件夹，双击 `MQNetScan.exe` 运行。首次启动时，程序会在 exe 同一目录创建 `MQNetScan.ini`，用于保存设置。
+
+ZIP 包内包含程序、.NET Framework 启动配置、README 和随包文档。无需安装，保持文件夹中的文件在一起即可运行。
 
 软件面向 Windows 桌面系统，目标框架为 .NET Framework 4.0，设计目标包含 Windows 7 SP1 及更新版本。首次运行建议使用普通权限；清理 ARP 缓存等需要管理员权限的操作会先提供说明，不会自动弹出 UAC。
 
@@ -91,7 +93,7 @@ Windows 可能要求管理员权限。请阅读程序给出的说明；只有在
 本项目使用 C#、Windows Forms 和 .NET Framework 4.0，不依赖 NuGet 第三方运行库。Windows 开发环境可运行：
 
 ```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\build.ps1 -Configuration Release -WithDocs
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\build.ps1 -Configuration Release -WithDocs -PackageZip
 ```
 
 构建脚本会执行禁用 API、框架引用程序集、输出文件、程序集引用、图标和 manifest 等检查。首次构建若系统没有 .NET Framework 4.0 引用程序集，脚本会下载项目所需的 Microsoft 参考程序集到 `.toolchain/`；该目录不会提交到仓库。
@@ -101,6 +103,24 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\build.ps1 -Configurati
 ```powershell
 .\build\Tests\MQNetScan.Tests.exe
 ```
+
+## 更新日志
+
+### v1.1.0
+
+发布包：[`MQNetScan-v1.1.0.zip`](https://github.com/H-Mo/moequick-net-scan/releases/download/v1.1.0/MQNetScan-v1.1.0.zip)
+
+- 新增 ARP / ICMP Ping 两种可选探测方式，并记住上次选择；Ping 模式支持配置超时与尝试次数。
+- 优化扫描页布局，进度条与报告操作按钮分行显示，避免控件遮挡。
+- 结果列表和报告增加设备识别可信度与识别依据，减少把端口线索误当成设备身份的情况。
+- 扩展设备类别框架，并为 SSDP/mDNS 协议发现预留接口；当前版本尚未主动识别 iPhone、电视和空调。
+- 修正通用局域网产品文案，更新操作说明和扫描限制。
+
+### v1.0.0
+
+- 首个正式版本，提供 Windows 局域网 ARP 设备发现、端口探测和基础设备类别判断。
+- 提供扫描控制、结果排序与复制、诊断报告导出、网络连通性自检和便捷系统工具。
+- 支持 `MQNetScan.ini` 配置，目标为 .NET Framework 4.0 / Windows 7 SP1 及更新版本。
 
 ## 许可
 

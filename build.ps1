@@ -37,6 +37,8 @@ param(
 
     [switch]$WithDocs,
 
+    [switch]$PackageZip,
+
     [switch]$SkipDisabledApiScan
 )
 
@@ -428,6 +430,42 @@ function Copy-DocsIfRequested {
 }
 
 # ---------------------------------------------------------------------------
+# 可选：生成便携 Release ZIP
+# ---------------------------------------------------------------------------
+function New-PortableReleaseZip {
+    if (-not $PackageZip) { return }
+    if ($Configuration -ne 'Release') { throw '-PackageZip 只能与 -Configuration Release 一起使用' }
+
+    $packageName = 'MQNetScan-v1.1.0'
+    $stageRoot = Join-Path $Root 'build\package-stage'
+    $packageDir = Join-Path $stageRoot $packageName
+    $zipPath = Join-Path $Root ("build\{0}.zip" -f $packageName)
+
+    if (Test-Path $stageRoot) { Remove-Item $stageRoot -Recurse -Force }
+    New-Item -ItemType Directory -Force -Path $packageDir | Out-Null
+
+    foreach ($name in @('MQNetScan.exe', 'MQNetScan.exe.config')) {
+        $source = Join-Path $OutDir $name
+        if (-not (Test-Path $source)) { throw "发布文件缺失：$source" }
+        Copy-Item $source $packageDir -Force
+    }
+
+    $readme = Join-Path $Root 'README.md'
+    if (-not (Test-Path $readme)) { throw "README 不存在：$readme" }
+    Copy-Item $readme $packageDir -Force
+
+    $docs = Join-Path $OutDir 'doc'
+    if (Test-Path $docs) { Copy-Item $docs (Join-Path $packageDir 'doc') -Recurse -Force }
+
+    if (Test-Path $zipPath) { Remove-Item $zipPath -Force }
+    Compress-Archive -Path (Join-Path $packageDir '*') -DestinationPath $zipPath -CompressionLevel Optimal
+
+    $zip = Get-Item $zipPath
+    Write-Ok ("Portable release ZIP created: {0} ({1:N0} KB)" -f $zip.FullName, ($zip.Length / 1KB))
+    Remove-Item $stageRoot -Recurse -Force
+}
+
+# ---------------------------------------------------------------------------
 # 主流程
 # ---------------------------------------------------------------------------
 $startTime = Get-Date
@@ -448,6 +486,7 @@ try {
     Test-ReferencedAssemblies -RefPath $refPath
     Test-PdbAndIcon
     Copy-DocsIfRequested
+    New-PortableReleaseZip
 }
 catch {
     Write-Host ''
