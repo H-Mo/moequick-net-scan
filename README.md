@@ -106,9 +106,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\build.ps1 -Configurati
 
 ## 更新日志
 
-### v1.1.0
-
-发布包：[`MQNetScan-v1.1.0.zip`](https://github.com/H-Mo/moequick-net-scan/releases/download/v1.1.0/MQNetScan-v1.1.0.zip)
+### v1.1.0 — 2026-11-22
 
 - 新增 ARP / ICMP Ping 两种可选探测方式，并记住上次选择；Ping 模式支持配置超时与尝试次数。
 - 优化扫描页布局，进度条与报告操作按钮分行显示，避免控件遮挡。
@@ -116,7 +114,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\build.ps1 -Configurati
 - 扩展设备类别框架，并为 SSDP/mDNS 协议发现预留接口；当前版本尚未主动识别 iPhone、电视和空调。
 - 修正通用局域网产品文案，更新操作说明和扫描限制。
 
-### v1.0.0
+### v1.0.0 — 2026-11-21
 
 - 首个正式版本，提供 Windows 局域网 ARP 设备发现、端口探测和基础设备类别判断。
 - 提供扫描控制、结果排序与复制、诊断报告导出、网络连通性自检和便捷系统工具。

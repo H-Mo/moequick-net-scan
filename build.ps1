@@ -439,7 +439,7 @@ function New-PortableReleaseZip {
     $packageName = 'MQNetScan-v1.1.0'
     $stageRoot = Join-Path $Root 'build\package-stage'
     $packageDir = Join-Path $stageRoot $packageName
-    $zipPath = Join-Path $Root ("build\{0}.zip" -f $packageName)
+    $zipPath = Join-Path $OutDir ("{0}.zip" -f $packageName)
 
     if (Test-Path $stageRoot) { Remove-Item $stageRoot -Recurse -Force }
     New-Item -ItemType Directory -Force -Path $packageDir | Out-Null
