@@ -74,6 +74,8 @@
     <Compile Include="ToolsTests.cs" />
     <Compile Include="SettingsPageRulesTests.cs" />
     <Compile Include="RoleModelMigrationTests.cs" />
+    <Compile Include="UpdateServiceTests.cs" />
+    <Compile Include="SettingsUpdateTests.cs" />
   </ItemGroup>
 
   <ItemGroup>

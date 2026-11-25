@@ -41,6 +41,8 @@ namespace MQNetScan.Tests
                 ToolsTests.Run();
                 SettingsPageRulesTests.Run();
                 RoleModelMigrationTests.Run();
+                UpdateServiceTests.Run();
+                SettingsUpdateTests.Run();
 
                 // 真实 ARP 端到端用例默认跳过（耗时长），需显式加参数触发：
                 //   MQNetScan.Tests.exe --arp-e2e

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using MQNetScan.Engine.Contracts;
+using MQNetScan.Application;
 using MQNetScan.Infrastructure;
 using MQNetScan.Presentation.Common;
 
@@ -18,6 +19,12 @@ namespace MQNetScan.Presentation.Pages
         private AppSettings _settings;
         private string _configPath = "";
         private bool _suppressEvents;
+        private string _downloadUrl = "";
+        private bool _updateCheckInProgress;
+        private const string WebsiteUrl = "https://div.moe/products/moequick-net-scan.html";
+        private const string GithubUrl = "https://github.com/H-Mo/moequick-net-scan";
+        private static readonly string CurrentVersion =
+            typeof(SettingsPage).Assembly.GetName().Version.ToString(3);
 
         /// <summary>保存成功或设置变更后触发，供主窗体刷新状态栏。</summary>
         public event EventHandler SettingsSaved;
@@ -37,11 +44,20 @@ namespace MQNetScan.Presentation.Pages
             get { return _settings == null ? null : _settings.PortRules; }
         }
 
+        internal string UpdateStatusText { get { return lblUpdateStatus.Text; } }
+        internal string CurrentVersionText { get { return lblCurrentVersion.Text; } }
+        internal bool DownloadButtonEnabled { get { return btnDownloadUpdate.Enabled; } }
+        internal string WebsiteAddress { get { return WebsiteUrl; } }
+        internal string GithubAddress { get { return GithubUrl; } }
+
         public SettingsPage()
         {
             InitializeComponent();
             ConfigureRuleList();
             lblPhaseNote.Text = "";
+            lblCurrentVersion.Text = "当前版本：v" + CurrentVersion;
+            lblUpdateStatus.Text = "正在检查更新…";
+            btnDownloadUpdate.Enabled = false;
         }
 
         /// <summary>
@@ -72,6 +88,7 @@ namespace MQNetScan.Presentation.Pages
         {
             _settings = settings;
             _configPath = configPath;
+            lblCurrentVersion.Text = "当前版本：v" + CurrentVersion;
 
             _suppressEvents = true;
             try
@@ -92,6 +109,83 @@ namespace MQNetScan.Presentation.Pages
 
             // 规则表
             RefreshRuleList();
+        }
+
+        public void SetUpdateCheckInProgress()
+        {
+            if (IsDisposed) { return; }
+            _updateCheckInProgress = true;
+            lblUpdateStatus.Text = "正在检查更新…";
+            btnCheckUpdates.Enabled = false;
+        }
+
+        public void ApplyUpdateCheckResult(UpdateCheckResult result)
+        {
+            if (IsDisposed) { return; }
+            if (InvokeRequired)
+            {
+                try { BeginInvoke(new Action<UpdateCheckResult>(ApplyUpdateCheckResult), result); }
+                catch (InvalidOperationException) { }
+                return;
+            }
+
+            _updateCheckInProgress = false;
+            btnCheckUpdates.Enabled = true;
+            _downloadUrl = "";
+            btnDownloadUpdate.Enabled = false;
+
+            if (result == null || !result.HasUpdate)
+            {
+                lblUpdateStatus.Text = "当前没有可用更新。";
+                return;
+            }
+
+            _downloadUrl = result.DownloadUrl;
+            btnDownloadUpdate.Enabled = _downloadUrl.Length > 0;
+            string notes = "";
+            int noteCount = Math.Min(3, result.ReleaseNotes.Length);
+            for (int i = 0; i < noteCount; i++)
+            {
+                string note = result.ReleaseNotes[i] == null ? "" : result.ReleaseNotes[i].Trim();
+                if (note.Length > 120) { note = note.Substring(0, 117) + "..."; }
+                if (note.Length == 0) { continue; }
+                if (notes.Length > 0) { notes += "\r\n"; }
+                notes += "• " + note;
+            }
+            lblUpdateStatus.Text = "发现新版本 v" + result.LatestVersion
+                + (result.ReleaseDate.Length > 0 ? "（" + result.ReleaseDate + "）" : "")
+                + (notes.Length > 0 ? "。\r\n" + notes : "。");
+        }
+
+        public void BeginManualUpdateCheck()
+        {
+            if (_updateCheckInProgress) { return; }
+            SetUpdateCheckInProgress();
+            UpdateService.CheckAsync(CurrentVersion, ApplyUpdateCheckResult);
+        }
+
+        private void OnCheckUpdatesClick(object sender, EventArgs e)
+        {
+            BeginManualUpdateCheck();
+        }
+
+        private void OnDownloadUpdateClick(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(_downloadUrl)) { return; }
+            ProcessLauncher.LaunchResult result = ProcessLauncher.OpenUrl(_downloadUrl);
+            if (!result.Success) { RaiseNotify(result.Message, true); }
+        }
+
+        private void OnOpenWebsiteClick(object sender, EventArgs e)
+        {
+            ProcessLauncher.LaunchResult result = ProcessLauncher.OpenUrl(WebsiteUrl);
+            if (!result.Success) { RaiseNotify(result.Message, true); }
+        }
+
+        private void OnOpenGithubClick(object sender, EventArgs e)
+        {
+            ProcessLauncher.LaunchResult result = ProcessLauncher.OpenUrl(GithubUrl);
+            if (!result.Success) { RaiseNotify(result.Message, true); }
         }
 
         /// <summary>

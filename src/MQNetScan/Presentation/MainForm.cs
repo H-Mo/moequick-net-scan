@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using MQNetScan.Application;
 using MQNetScan.Engine;
 using MQNetScan.Infrastructure;
 using MQNetScan.Presentation.Pages;
@@ -16,6 +17,7 @@ namespace MQNetScan.Presentation
         private AppSettings _settings;
         private string _configPath;
         private Timer _statusResetTimer;
+        private bool _updateCheckStarted;
 
         public MainForm()
         {
@@ -23,6 +25,7 @@ namespace MQNetScan.Presentation
             LoadAppIcon();
             InitializeConfig();
             HookEvents();
+            Shown += OnMainFormShown;
         }
 
         /// <summary>
@@ -127,6 +130,15 @@ namespace MQNetScan.Presentation
             }
 
             return false;
+        }
+
+        private void OnMainFormShown(object sender, EventArgs e)
+        {
+            if (_updateCheckStarted) { return; }
+            _updateCheckStarted = true;
+            settingsPage.SetUpdateCheckInProgress();
+            UpdateService.CheckAsync(typeof(MainForm).Assembly.GetName().Version.ToString(3),
+                settingsPage.ApplyUpdateCheckResult);
         }
 
         private void HookEvents()

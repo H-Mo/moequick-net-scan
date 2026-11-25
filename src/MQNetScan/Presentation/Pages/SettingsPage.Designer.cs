@@ -31,6 +31,13 @@ namespace MQNetScan.Presentation.Pages
 
         private System.Windows.Forms.GroupBox grpFactory;
         private System.Windows.Forms.Button btnFactoryReset;
+        private System.Windows.Forms.GroupBox grpAbout;
+        private System.Windows.Forms.Label lblCurrentVersion;
+        private System.Windows.Forms.Label lblUpdateStatus;
+        private System.Windows.Forms.Button btnCheckUpdates;
+        private System.Windows.Forms.Button btnDownloadUpdate;
+        private System.Windows.Forms.Button btnOpenWebsite;
+        private System.Windows.Forms.Button btnOpenGithub;
 
         protected override void Dispose(bool disposing)
         {
@@ -70,6 +77,13 @@ namespace MQNetScan.Presentation.Pages
 
             this.grpFactory = new System.Windows.Forms.GroupBox();
             this.btnFactoryReset = new System.Windows.Forms.Button();
+            this.grpAbout = new System.Windows.Forms.GroupBox();
+            this.lblCurrentVersion = new System.Windows.Forms.Label();
+            this.lblUpdateStatus = new System.Windows.Forms.Label();
+            this.btnCheckUpdates = new System.Windows.Forms.Button();
+            this.btnDownloadUpdate = new System.Windows.Forms.Button();
+            this.btnOpenWebsite = new System.Windows.Forms.Button();
+            this.btnOpenGithub = new System.Windows.Forms.Button();
 
             this.grpScanParams.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numConcurrency)).BeginInit();
@@ -307,6 +321,73 @@ namespace MQNetScan.Presentation.Pages
             this.grpFactory.TabStop = false;
             this.grpFactory.Text = "危险操作";
 
+            // grpAbout
+            this.grpAbout.Controls.Add(this.btnOpenGithub);
+            this.grpAbout.Controls.Add(this.btnOpenWebsite);
+            this.grpAbout.Controls.Add(this.btnDownloadUpdate);
+            this.grpAbout.Controls.Add(this.btnCheckUpdates);
+            this.grpAbout.Controls.Add(this.lblUpdateStatus);
+            this.grpAbout.Controls.Add(this.lblCurrentVersion);
+            this.grpAbout.Location = new System.Drawing.Point(18, 596);
+            this.grpAbout.Name = "grpAbout";
+            this.grpAbout.Size = new System.Drawing.Size(848, 148);
+            this.grpAbout.TabIndex = 8;
+            this.grpAbout.TabStop = false;
+            this.grpAbout.Text = "关于";
+
+            // lblCurrentVersion
+            this.lblCurrentVersion.AutoSize = true;
+            this.lblCurrentVersion.Location = new System.Drawing.Point(12, 24);
+            this.lblCurrentVersion.Name = "lblCurrentVersion";
+            this.lblCurrentVersion.Size = new System.Drawing.Size(0, 12);
+            this.lblCurrentVersion.TabIndex = 0;
+
+            // lblUpdateStatus
+            this.lblUpdateStatus.AutoSize = true;
+            this.lblUpdateStatus.ForeColor = System.Drawing.Color.FromArgb(90, 90, 90);
+            this.lblUpdateStatus.Location = new System.Drawing.Point(12, 48);
+            this.lblUpdateStatus.MaximumSize = new System.Drawing.Size(800, 40);
+            this.lblUpdateStatus.Name = "lblUpdateStatus";
+            this.lblUpdateStatus.Size = new System.Drawing.Size(0, 12);
+            this.lblUpdateStatus.TabIndex = 1;
+
+            // btnCheckUpdates
+            this.btnCheckUpdates.Location = new System.Drawing.Point(12, 78);
+            this.btnCheckUpdates.Name = "btnCheckUpdates";
+            this.btnCheckUpdates.Size = new System.Drawing.Size(110, 26);
+            this.btnCheckUpdates.TabIndex = 2;
+            this.btnCheckUpdates.Text = "检测更新";
+            this.btnCheckUpdates.UseVisualStyleBackColor = true;
+            this.btnCheckUpdates.Click += new System.EventHandler(this.OnCheckUpdatesClick);
+
+            // btnDownloadUpdate
+            this.btnDownloadUpdate.Enabled = false;
+            this.btnDownloadUpdate.Location = new System.Drawing.Point(130, 78);
+            this.btnDownloadUpdate.Name = "btnDownloadUpdate";
+            this.btnDownloadUpdate.Size = new System.Drawing.Size(110, 26);
+            this.btnDownloadUpdate.TabIndex = 3;
+            this.btnDownloadUpdate.Text = "前往下载";
+            this.btnDownloadUpdate.UseVisualStyleBackColor = true;
+            this.btnDownloadUpdate.Click += new System.EventHandler(this.OnDownloadUpdateClick);
+
+            // btnOpenWebsite
+            this.btnOpenWebsite.Location = new System.Drawing.Point(584, 78);
+            this.btnOpenWebsite.Name = "btnOpenWebsite";
+            this.btnOpenWebsite.Size = new System.Drawing.Size(110, 26);
+            this.btnOpenWebsite.TabIndex = 4;
+            this.btnOpenWebsite.Text = "官方网站";
+            this.btnOpenWebsite.UseVisualStyleBackColor = true;
+            this.btnOpenWebsite.Click += new System.EventHandler(this.OnOpenWebsiteClick);
+
+            // btnOpenGithub
+            this.btnOpenGithub.Location = new System.Drawing.Point(702, 78);
+            this.btnOpenGithub.Name = "btnOpenGithub";
+            this.btnOpenGithub.Size = new System.Drawing.Size(110, 26);
+            this.btnOpenGithub.TabIndex = 5;
+            this.btnOpenGithub.Text = "GitHub 仓库";
+            this.btnOpenGithub.UseVisualStyleBackColor = true;
+            this.btnOpenGithub.Click += new System.EventHandler(this.OnOpenGithubClick);
+
             // btnFactoryReset
             this.btnFactoryReset.Location = new System.Drawing.Point(12, 16);
             this.btnFactoryReset.Name = "btnFactoryReset";
@@ -319,6 +400,8 @@ namespace MQNetScan.Presentation.Pages
             // SettingsPage
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
+            this.Controls.Add(this.grpAbout);
             this.Controls.Add(this.grpFactory);
             this.Controls.Add(this.grpRules);
             this.Controls.Add(this.lblPhaseNote);

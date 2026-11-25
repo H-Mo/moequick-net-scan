@@ -6,11 +6,11 @@
 
 ## 下载与运行
 
-1. 打开 [GitHub Releases](https://github.com/H-Mo/moequick-net-scan/releases) 下载 `MQNetScan-v1.1.0.zip`。
+1. 打开 [GitHub Releases](https://github.com/H-Mo/moequick-net-scan/releases) 下载 `MQNetScan-v1.2.0.zip`。
 2. 将 ZIP 解压到你有写入权限的文件夹，例如桌面或“文档”。
-3. 打开解压出的 `MQNetScan-v1.1.0` 文件夹，双击 `MQNetScan.exe` 运行。首次启动时，程序会在 exe 同一目录创建 `MQNetScan.ini`，用于保存设置。
+3. 打开解压出的 `MQNetScan-v1.2.0` 文件夹，双击 `MQNetScan.exe` 运行。首次启动时，程序会在 exe 同一目录创建 `MQNetScan.ini`，用于保存设置。
 
-ZIP 包内包含程序、.NET Framework 启动配置、README 和随包文档。无需安装，保持文件夹中的文件在一起即可运行。
+ZIP 包内仅包含 `MQNetScan.exe` 和 `MQNetScan.exe.config`。无需安装，解压后双击程序即可运行；首次启动会在同目录生成 `MQNetScan.ini`。
 
 软件面向 Windows 桌面系统，目标框架为 .NET Framework 4.0，设计目标包含 Windows 7 SP1 及更新版本。首次运行建议使用普通权限；清理 ARP 缓存等需要管理员权限的操作会先提供说明，不会自动弹出 UAC。
 
@@ -105,6 +105,12 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\build.ps1 -Configurati
 ```
 
 ## 更新日志
+
+### v1.2.0 — 2026-11-25
+
+- 程序启动后在后台静默检查更新；新版本只在“设置 > 关于”区域提示，不弹窗打断操作。
+- 增加手动“检测更新”和“前往下载”按钮，并显示发布日期与更新内容；请求失败按“当前没有可用更新”处理。
+- “关于”区域增加官方网站和 GitHub 仓库按钮。
 
 ### v1.1.0 — 2026-11-22
 

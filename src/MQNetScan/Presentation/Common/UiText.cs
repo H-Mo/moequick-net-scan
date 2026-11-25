@@ -9,7 +9,7 @@ namespace MQNetScan.Presentation.Common
         /// <summary>
         /// 主窗体标题。必须与 AssemblyInfo 的 AssemblyTitle 保持一致（边界检查 B-9）。
         /// </summary>
-        public const string AppTitle = "MoeQuick NetScan v1.1.0 - 萌快网维";
+        public const string AppTitle = "MoeQuick NetScan v1.2.0 - 萌快网维";
 
         public const string TabScan = "局域网探测";
         public const string TabTools = "便捷功能";
