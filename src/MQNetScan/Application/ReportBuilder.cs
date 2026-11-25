@@ -144,9 +144,9 @@ namespace MQNetScan.Application
                 return;
             }
 
-            // 列宽：编号(4) IP(16) MAC(18) 厂商前缀(11) 开放端口(20) 角色
-            sb.AppendLine("编号  IP 地址          MAC 地址            厂商前缀    开放端口              角色        可信度  识别依据");
-            sb.AppendLine("----  ---------------  ------------------  ----------  --------------------  ----------  ------  ------------------------------");
+            // 列宽：编号、IP、名称、MAC、厂商、端口、类别、可信度、依据。
+            sb.AppendLine("编号  IP 地址          设备名称          MAC 地址            厂商前缀    开放端口              设备类别    可信度  识别依据");
+            sb.AppendLine("----  ---------------  ----------------  ------------------  ----------  --------------------  ----------  ------  ------------------------------");
 
             for (int i = 0; i < input.Hosts.Count; i++)
             {
@@ -154,6 +154,7 @@ namespace MQNetScan.Application
 
                 string index = (i + 1).ToString(CultureInfo.InvariantCulture).PadLeft(4);
                 string ip = PadRight(Safe(h.IpText), 15);
+                string deviceName = PadRight(Truncate(Safe(h.DeviceName), 16), 16);
                 string mac = PadRight(Truncate(Safe(h.MacAddress), 18), 18);
                 string oui = PadRight(Truncate(Safe(h.OuiPrefix), 10), 10);
                 string ports = PadRight(Truncate(Safe(h.OpenPortsText), 20), 20);
@@ -163,6 +164,7 @@ namespace MQNetScan.Application
 
                 sb.Append(index).Append("  ")
                   .Append(ip).Append("  ")
+                  .Append(deviceName).Append("  ")
                   .Append(mac).Append("  ")
                   .Append(oui).Append("  ")
                   .Append(ports).Append("  ")

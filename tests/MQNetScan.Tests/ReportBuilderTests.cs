@@ -58,6 +58,7 @@ namespace MQNetScan.Tests
             h1.Role = RolePriority.RoleNetworkDevice;
 
             HostRecord h2 = new HostRecord(ip2, "00:26:66:AA:BB:CC", new int[] { 515, 631, 9100 });
+            h2.DeviceName = "PRINTER-21";
             h2.Role = RolePriority.RolePrinter;
 
             HostRecord h3 = new HostRecord(ip3, "00:11:22:33:44:55", new int[] { 135, 445, 3389 });
@@ -109,6 +110,8 @@ namespace MQNetScan.Tests
 
             // 明细内容
             TestRunner.AssertTrue(text.IndexOf("192.168.1.21") >= 0, "明细含打印机 IP");
+            TestRunner.AssertTrue(text.IndexOf("PRINTER-21") >= 0, "明细含设备名称");
+            TestRunner.AssertTrue(text.IndexOf("设备名称") >= 0, "明细含设备名称列");
             TestRunner.AssertTrue(text.IndexOf("00:26:66:AA:BB:CC") >= 0, "明细含 MAC");
             TestRunner.AssertTrue(text.IndexOf("00:26:66") >= 0, "明细含 OUI");
             TestRunner.AssertTrue(text.IndexOf("9100") >= 0, "明细含端口");

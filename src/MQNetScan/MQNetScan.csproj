@@ -92,6 +92,8 @@
     <Compile Include="Infrastructure\PortRule.cs" />
     <Compile Include="Infrastructure\RoleDefinition.cs" />
     <Compile Include="Infrastructure\ArpTableReader.cs" />
+    <Compile Include="Infrastructure\DeviceNameResolver.cs" />
+    <Compile Include="Infrastructure\DeviceNameLookupQueue.cs" />
     <Compile Include="Infrastructure\ProcessLauncher.cs" />
     <Compile Include="Infrastructure\SettingsService.cs" />
     <Compile Include="Presentation\Common\AlertBanner.cs" />

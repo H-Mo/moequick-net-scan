@@ -51,7 +51,7 @@ namespace MQNetScan.Tests
                 TestRunner.AssertTrue(lv.MultiSelect, "支持多选");
                 TestRunner.AssertTrue(!lv.LabelEdit, "禁止就地编辑");
 
-                string[] expected = { "#", "IP 地址", "MAC 地址", "厂商前缀", "开放端口", "角色", "可信度", "识别依据", "深度测速" };
+                string[] expected = { "#", "IP 地址", "设备名称", "MAC 地址", "厂商前缀", "开放端口", "角色", "可信度", "识别依据", "深度测速" };
 
                 for (int i = 0; i < expected.Length; i++)
                 {
@@ -77,7 +77,12 @@ namespace MQNetScan.Tests
 
             TestRunner.AssertEqual("7", item.SubItems[ListViewHelper.ColIndex].Text, "行号为 7");
             TestRunner.AssertEqual("192.168.1.21", item.SubItems[ListViewHelper.ColIp].Text, "IP 正确");
+            TestRunner.AssertEqual("—", item.SubItems[ListViewHelper.ColDeviceName].Text, "名称未解析时显示破折号");
             TestRunner.AssertEqual("00:26:66:AA:BB:CC", item.SubItems[ListViewHelper.ColMac].Text, "MAC 正确");
+            r.DeviceName = "WORKSTATION";
+            ListViewItem namedItem = ListViewHelper.BuildItem(r, 7);
+            TestRunner.AssertEqual("WORKSTATION", namedItem.SubItems[ListViewHelper.ColDeviceName].Text,
+                "显示已解析的设备名称");
             TestRunner.AssertEqual("00:26:66", item.SubItems[ListViewHelper.ColOui].Text, "OUI 正确");
             TestRunner.AssertEqual("515, 631, 9100", item.SubItems[ListViewHelper.ColPorts].Text,
                 "端口逗号分隔");

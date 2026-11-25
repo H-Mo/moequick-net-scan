@@ -15,6 +15,7 @@ namespace MQNetScan.Engine.Contracts
 
         private readonly uint _ipAddress;
         private readonly string _macAddress;
+        private string _deviceName;
         private readonly int[] _openPorts;
         private string _role;
         private DeviceConfidence _confidence;
@@ -29,6 +30,7 @@ namespace MQNetScan.Engine.Contracts
         {
             _ipAddress = ipAddress;
             _macAddress = macAddress == null ? "" : macAddress;
+            _deviceName = "";
             _openPorts = openPorts == null ? EmptyPorts : openPorts;
             _role = RolePriority.RoleUnknown;
             _confidence = DeviceConfidence.Unknown;
@@ -54,6 +56,25 @@ namespace MQNetScan.Engine.Contracts
 
         /// <summary>MAC 地址（大写冒号分段）。</summary>
         public string MacAddress { get { return _macAddress; } }
+
+        /// <summary>尽力解析得到的设备名称，未知时为空。</summary>
+        public string DeviceName
+        {
+            get { return _deviceName; }
+            set { _deviceName = NormalizeDeviceName(value); }
+        }
+
+        private static string NormalizeDeviceName(string value)
+        {
+            if (string.IsNullOrEmpty(value)) { return ""; }
+            string name = value.Trim();
+            if (name.Length > 253) { name = name.Substring(0, 253); }
+            for (int i = 0; i < name.Length; i++)
+            {
+                if (char.IsControl(name[i])) { return ""; }
+            }
+            return name;
+        }
 
         /// <summary>OUI 前缀（MAC 前 3 字节），用作厂商线索。</summary>
         public string OuiPrefix

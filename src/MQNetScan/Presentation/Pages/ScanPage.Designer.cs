@@ -352,7 +352,7 @@ namespace MQNetScan.Presentation.Pages
 
             // miCopyRow
             this.miCopyRow.Name = "miCopyRow";
-            this.miCopyRow.Text = "复制整行（IP + MAC + 端口 + 角色）";
+            this.miCopyRow.Text = "复制整行（IP + 名称 + MAC + 端口 + 角色）";
             this.miCopyRow.Click += new System.EventHandler(this.OnCopyRowClick);
 
             // miSep1

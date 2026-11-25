@@ -158,7 +158,7 @@ namespace MQNetScan.Tests
                 string[] expected = {
                     "复制 IP 地址",
                     "复制 MAC 地址",
-                    "复制整行（IP + MAC + 端口 + 角色）",
+                    "复制整行（IP + 名称 + MAC + 端口 + 角色）",
                     "深度测速（3 次握手）",
                     "浏览器打开 Web 后台",
                     "打开远程桌面（mstsc）",

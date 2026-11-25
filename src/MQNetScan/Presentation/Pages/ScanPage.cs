@@ -69,6 +69,9 @@ namespace MQNetScan.Presentation.Pages
 
         /// <summary>本次扫描的 IP 冲突检测器（供收尾时汇总告警）。</summary>
         private ConflictDetector _conflictDetector;
+        private DeviceNameLookupQueue _deviceNameQueue;
+        private readonly object _hostRecordLock = new object();
+        private readonly Dictionary<uint, HostRecord> _hostRecords = new Dictionary<uint, HostRecord>();
 
         /// <summary>用户确认开始扫描时触发。参数为本次扫描的目标范围。</summary>
         public event EventHandler<ScanStartEventArgs> ScanStartRequested;
@@ -920,6 +923,36 @@ namespace MQNetScan.Presentation.Pages
             RaiseNotify("开始扫描：" + seg.DisplayText + "（" + seg.HostCount + " 个地址）", false);
         }
 
+        private void QueueDeviceNameLookup(HostRecord record)
+        {
+            if (_deviceNameQueue == null) { _deviceNameQueue = new DeviceNameLookupQueue(); }
+            _deviceNameQueue.Enqueue(record, OnDeviceNameResolved);
+        }
+
+        private void OnDeviceNameResolved(HostRecord record)
+        {
+            if (record == null || IsDisposed || !IsHandleCreated) { return; }
+            try
+            {
+                BeginInvoke(new Action(delegate
+                {
+                    if (IsDisposed || listHosts.IsDisposed) { return; }
+                    lock (_hostRecordLock) { _hostRecords[record.IpAddress] = record; }
+                    string ip = record.IpText;
+                    for (int i = 0; i < listHosts.Items.Count; i++)
+                    {
+                        ListViewItem item = listHosts.Items[i];
+                        if (item.SubItems[ListViewHelper.ColIp].Text == ip)
+                        {
+                            item.SubItems[ListViewHelper.ColDeviceName].Text = record.DeviceName;
+                            break;
+                        }
+                    }
+                }));
+            }
+            catch (InvalidOperationException) { }
+        }
+
         private void StartRefreshTimer()
         {
             if (_refreshTimer == null)
@@ -949,7 +982,10 @@ namespace MQNetScan.Presentation.Pages
             {
                 for (int i = 0; i < batch.Count; i++)
                 {
-                    _dispatcher.Post(batch[i]);
+                    HostRecord record = batch[i];
+                    lock (_hostRecordLock) { _hostRecords[record.IpAddress] = record; }
+                    _dispatcher.Post(record);
+                    QueueDeviceNameLookup(record);
                 }
 
                 _displayedRows += batch.Count;
@@ -1480,7 +1516,11 @@ namespace MQNetScan.Presentation.Pages
                 int[] ports = ParsePorts(item.SubItems[ListViewHelper.ColPorts].Text);
 
                 HostRecord rec = new HostRecord(ip, item.SubItems[ListViewHelper.ColMac].Text, ports);
+                rec.DeviceName = item.SubItems[ListViewHelper.ColDeviceName].Text == "—"
+                    ? "" : item.SubItems[ListViewHelper.ColDeviceName].Text;
                 rec.Role = item.SubItems[ListViewHelper.ColRole].Text;
+                rec.Confidence = ReadConfidence(item.SubItems[ListViewHelper.ColConfidence].Text);
+                rec.Evidence = item.SubItems[ListViewHelper.ColEvidence].Text;
 
                 hosts.Add(rec);
             }
@@ -1494,6 +1534,14 @@ namespace MQNetScan.Presentation.Pages
             input.Truncated = _dispatcher != null && _dispatcher.IsTruncated;
 
             return input;
+        }
+
+        private static DeviceConfidence ReadConfidence(string value)
+        {
+            if (value == "高") { return DeviceConfidence.High; }
+            if (value == "中") { return DeviceConfidence.Medium; }
+            if (value == "低") { return DeviceConfidence.Low; }
+            return DeviceConfidence.Unknown;
         }
 
         public void SetProgress(int percent)
@@ -1540,6 +1588,12 @@ namespace MQNetScan.Presentation.Pages
                 {
                     _dispatcher.Dispose();
                     _dispatcher = null;
+                }
+
+                if (_deviceNameQueue != null)
+                {
+                    _deviceNameQueue.Dispose();
+                    _deviceNameQueue = null;
                 }
 
                 if (components != null)

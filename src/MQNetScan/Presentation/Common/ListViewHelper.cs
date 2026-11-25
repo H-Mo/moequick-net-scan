@@ -26,15 +26,16 @@ namespace MQNetScan.Presentation.Common
         // -------------------------------------------------------------------
         public const int ColIndex = 0;
         public const int ColIp = 1;
-        public const int ColMac = 2;
-        public const int ColOui = 3;
-        public const int ColPorts = 4;
-        public const int ColRole = 5;
-        public const int ColConfidence = 6;
-        public const int ColEvidence = 7;
-        public const int ColPing3 = 8;
+        public const int ColDeviceName = 2;
+        public const int ColMac = 3;
+        public const int ColOui = 4;
+        public const int ColPorts = 5;
+        public const int ColRole = 6;
+        public const int ColConfidence = 7;
+        public const int ColEvidence = 8;
+        public const int ColPing3 = 9;
 
-        public const int ColumnCount = 9;
+        public const int ColumnCount = 10;
 
         /// <summary>
         /// 初始化列头与基本样式。
@@ -53,6 +54,7 @@ namespace MQNetScan.Presentation.Common
 
             AddColumn(listView, "#", 44, HorizontalAlignment.Right);
             AddColumn(listView, "IP 地址", 130, HorizontalAlignment.Left);
+            AddColumn(listView, "设备名称", 150, HorizontalAlignment.Left);
             AddColumn(listView, "MAC 地址", 150, HorizontalAlignment.Left);
             AddColumn(listView, "厂商前缀", 90, HorizontalAlignment.Left);
             AddColumn(listView, "开放端口", 180, HorizontalAlignment.Left);
@@ -82,6 +84,7 @@ namespace MQNetScan.Presentation.Common
             ListViewItem item = new ListViewItem(index.ToString(CultureInfo.InvariantCulture));
 
             item.SubItems.Add(record.IpText);
+            item.SubItems.Add(string.IsNullOrEmpty(record.DeviceName) ? "—" : record.DeviceName);
             item.SubItems.Add(string.IsNullOrEmpty(record.MacAddress) ? "—" : record.MacAddress);
             item.SubItems.Add(string.IsNullOrEmpty(record.MacAddress) ? "—" : record.OuiPrefix);
             item.SubItems.Add(record.OpenPortsText);
