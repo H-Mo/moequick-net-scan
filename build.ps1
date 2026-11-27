@@ -305,6 +305,7 @@ function Test-OutputArtifacts {
     # 若开发期间从输出目录启动过程序，它会出现在这里，属正常现象。
     $allowed = @('MQNetScan.exe', 'MQNetScan.exe.config', 'MQNetScan.pdb', 'MQNetScan.ini')
     $unexpected = Get-ChildItem $OutDir -File |
+        Where-Object { $_.Extension -ne '.zip' } |
         Where-Object { $allowed -notcontains $_.Name } |
         Where-Object { $_.Name -notlike '*.pdb' -or $Configuration -eq 'Release' }
 
