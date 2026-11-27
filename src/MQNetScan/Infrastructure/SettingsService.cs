@@ -259,7 +259,11 @@ namespace MQNetScan.Infrastructure
         {
             List<RoleDefinition> roles = ReadRoleSections(store, warnings);
 
-            if (roles.Count > 0) { return roles; }
+            if (roles.Count > 0)
+            {
+                MigrateScaleDefaultPorts(roles, warnings);
+                return roles;
+            }
 
             // 尝试旧格式迁移
             List<RoleDefinition> migrated = MigrateLegacyPortRules(store, warnings);
@@ -273,6 +277,33 @@ namespace MQNetScan.Infrastructure
 
             warnings.Add("未读到任何角色定义，已载入内置默认角色");
             return IniSchema.CreateDefaultRoles();
+        }
+
+        private static void MigrateScaleDefaultPorts(List<RoleDefinition> roles, List<string> warnings)
+        {
+            for (int i = 0; i < roles.Count; i++)
+            {
+                RoleDefinition role = roles[i];
+                if (role.Name != "电子秤" || role.Ports.Length != 2
+                    || !ContainsPort(role.Ports, 3001) || !ContainsPort(role.Ports, 4001))
+                {
+                    continue;
+                }
+
+                roles[i] = new RoleDefinition(role.Name, new int[] { 3001, 4001, 5001 },
+                    role.Comment, role.Enabled);
+                warnings.Add("电子秤内置端口已更新为 3001、4001、5001；保存设置后写入新规则。");
+                return;
+            }
+        }
+
+        private static bool ContainsPort(int[] ports, int target)
+        {
+            for (int i = 0; i < ports.Length; i++)
+            {
+                if (ports[i] == target) { return true; }
+            }
+            return false;
         }
 
         /// <summary>

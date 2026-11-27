@@ -27,6 +27,7 @@ namespace MQNetScan.Tests
                 TestMissingFileGeneratesDefaults();
                     TestRoundTrip();
                 TestProbeModeSettingsRoundTrip();
+                TestScaleDefaultPortMigration();
                 TestInvalidValuesFallback();
                 TestBrokenFileDoesNotThrow();
                 TestReadOnlyDirectory();
@@ -64,7 +65,7 @@ namespace MQNetScan.Tests
             TestRunner.AssertEqual(false, result.FileExisted, "FileExisted 为 false");
             TestRunner.AssertEqual(IniSchema.DefaultMaxConcurrency, result.Settings.MaxConcurrency, "并发数为默认 32");
             TestRunner.AssertEqual(IniSchema.DefaultPortTimeoutMs, result.Settings.PortTimeoutMs, "超时为默认 800");
-            TestRunner.AssertEqual(10, result.Settings.PortRules.Count, "端口规则为内置 10 条");
+            TestRunner.AssertEqual(11, result.Settings.PortRules.Count, "端口规则为内置 11 条");
 
             // 保存后应真实生成文件
             string error;
@@ -137,6 +138,46 @@ namespace MQNetScan.Tests
             TestRunner.AssertEqual((int)ProbeMode.Arp, old.Settings.LastProbeMode, "旧配置默认 ARP");
             TestRunner.AssertEqual(IniSchema.DefaultPingTimeoutMs, old.Settings.PingTimeoutMs, "旧配置 Ping 超时用默认值");
             TestRunner.AssertEqual(IniSchema.DefaultPingRetry, old.Settings.PingRetry, "旧配置 Ping 次数用默认值");
+        }
+
+        private static void TestScaleDefaultPortMigration()
+        {
+            Console.WriteLine();
+            Console.WriteLine("[SCALE-MIGRATION] 电子秤默认端口更新");
+            TestRunner.BeginCase("旧默认补入 5001，自定义角色保持不变");
+
+            string oldPath = NewPath("old-scale-default.ini");
+            string oldIni = "[Role.1]\r\nName=电子秤\r\nPorts=3001,4001\r\nComment=计价秤 / 条码秤通讯\r\nEnabled=true\r\n";
+            File.WriteAllText(oldPath, oldIni, new UTF8Encoding(false));
+            ConfigLoadResult oldResult = SettingsService.Load(oldPath);
+            RoleDefinition migrated = oldResult.Settings.FindRole("电子秤");
+            TestRunner.AssertTrue(migrated != null, "找到旧电子秤规则");
+            if (migrated != null)
+            {
+                TestRunner.AssertEqual("3001,4001,5001", migrated.PortsText, "旧默认规则增加 5001");
+            }
+            TestRunner.AssertTrue(Contains(oldResult.Warnings, "5001"), "提示规则已更新");
+
+            string customPath = NewPath("custom-scale-ports.ini");
+            string customIni = "[Role.1]\r\nName=电子秤\r\nPorts=3001,4001,8000\r\nComment=现场自定义\r\nEnabled=true\r\n";
+            File.WriteAllText(customPath, customIni, new UTF8Encoding(false));
+            ConfigLoadResult customResult = SettingsService.Load(customPath);
+            RoleDefinition custom = customResult.Settings.FindRole("电子秤");
+            TestRunner.AssertTrue(custom != null, "找到自定义电子秤规则");
+            if (custom != null)
+            {
+                TestRunner.AssertEqual("3001,4001,8000", custom.PortsText, "不覆盖用户自定义端口");
+            }
+        }
+
+        private static bool Contains(IList<string> values, string text)
+        {
+            if (values == null) { return false; }
+            for (int i = 0; i < values.Count; i++)
+            {
+                if (values[i] != null && values[i].IndexOf(text, StringComparison.Ordinal) >= 0) { return true; }
+            }
+            return false;
         }
 
         private static void TestInvalidValuesFallback()

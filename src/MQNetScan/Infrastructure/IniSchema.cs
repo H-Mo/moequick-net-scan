@@ -120,7 +120,7 @@ namespace MQNetScan.Infrastructure
             roles.Add(new RoleDefinition("本地服务器", new int[] { 1433 }, "SQL Server 本地数据库"));
             roles.Add(new RoleDefinition("Windows 电脑", new int[] { 445, 3389, 135 }, "SMB / 远程桌面 / RPC"));
             roles.Add(new RoleDefinition("打印机", new int[] { 9100, 515, 631 }, "RAW 直打 / LPR / IPP"));
-            roles.Add(new RoleDefinition("电子秤", new int[] { 3001, 4001 }, "计价秤 / 条码秤通讯"));
+            roles.Add(new RoleDefinition("电子秤", new int[] { 3001, 4001, 5001 }, "计价秤 / 条码秤通讯"));
             roles.Add(new RoleDefinition("安卓设备", new int[] { 5555 }, "ADB 调试端口"));
             return roles;
         }

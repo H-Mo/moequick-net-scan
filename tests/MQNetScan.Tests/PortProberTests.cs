@@ -94,7 +94,9 @@ namespace MQNetScan.Tests
 
             // 3001 + 4001 → 电子秤
             TestRunner.AssertEqual("电子秤",
-                RoleResolver.Resolve(new int[] { 3001, 4001 }, rules), "电子秤端口 → 电子秤");
+                RoleResolver.Resolve(new int[] { 3001, 4001, 5001 }, rules), "电子秤三端口 → 电子秤");
+            TestRunner.AssertEqual("电子秤",
+                RoleResolver.Resolve(new int[] { 5001 }, rules), "5001 → 电子秤");
 
             // 5555 → 安卓设备
             TestRunner.AssertEqual("安卓设备",
