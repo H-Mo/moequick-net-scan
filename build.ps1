@@ -437,7 +437,7 @@ function New-PortableReleaseZip {
     if (-not $PackageZip) { return }
     if ($Configuration -ne 'Release') { throw '-PackageZip 只能与 -Configuration Release 一起使用' }
 
-    $packageName = 'MQNetScan-v1.2.1'
+    $packageName = 'MQNetScan-v1.3.0'
     $stageRoot = Join-Path $Root 'build\package-stage'
     $packageDir = Join-Path $stageRoot $packageName
     $zipPath = Join-Path $OutDir ("{0}.zip" -f $packageName)
@@ -479,7 +479,7 @@ function New-PortableReleaseZip {
 $startTime = Get-Date
 
 if ($Configuration -eq 'Release' -and $PackageZip) {
-    $stalePackage = Join-Path $Root 'build\Release\MQNetScan-v1.2.1.zip'
+    $stalePackage = Join-Path $Root 'build\Release\MQNetScan-v1.3.0.zip'
     if (Test-Path $stalePackage) { Remove-Item $stalePackage -Force }
 }
 

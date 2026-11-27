@@ -6,9 +6,9 @@
 
 ## 下载与运行
 
-1. 打开 [GitHub Releases](https://github.com/H-Mo/moequick-net-scan/releases) 下载 `MQNetScan-v1.2.1.zip`。
+1. 打开 [GitHub Releases](https://github.com/H-Mo/moequick-net-scan/releases) 下载 `MQNetScan-v1.3.0.zip`。
 2. 将 ZIP 解压到你有写入权限的文件夹，例如桌面或“文档”。
-3. 打开解压出的 `MQNetScan-v1.2.1` 文件夹，双击 `MQNetScan.exe` 运行。首次启动时，程序会在 exe 同一目录创建 `MQNetScan.ini`，用于保存设置。
+3. 打开解压出的 `MQNetScan-v1.3.0` 文件夹，双击 `MQNetScan.exe` 运行。首次启动时，程序会在 exe 同一目录创建 `MQNetScan.ini`，用于保存设置。
 
 ZIP 包内仅包含 `MQNetScan.exe` 和 `MQNetScan.exe.config`。无需安装，解压后双击程序即可运行；首次启动会在同目录生成 `MQNetScan.ini`。
 
@@ -107,10 +107,11 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\build.ps1 -Configurati
 
 ## 更新日志
 
-### v1.2.1 — 2026-11-25
+### v1.3.0 — 2026-11-27
 
-- 扫描结果与诊断报告新增设备名称，尽力通过反向 DNS 和 NetBIOS 获取；名称解析失败时显示“—”，不影响设备存活判断。
-- 电子秤默认端口特征为 3001、4001、5001；压缩扫描结果列宽，减少横向滚动距离。
+- 收紧局域网扫描目标区域并增高结果列表，减少无效留白。
+- 将设置页扫描参数整理为两排，并增加端口规则区域可用高度。
+- 连通性自测默认网址改为阿里云 `www.aliyun.com`；旧默认目标自动迁移，自定义目标保留。
 
 ### v1.2.0 — 2026-11-25
 
