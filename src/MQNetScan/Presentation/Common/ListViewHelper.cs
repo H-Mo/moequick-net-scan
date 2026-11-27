@@ -52,16 +52,16 @@ namespace MQNetScan.Presentation.Common
 
             listView.Columns.Clear();
 
-            AddColumn(listView, "#", 44, HorizontalAlignment.Right);
-            AddColumn(listView, "IP 地址", 130, HorizontalAlignment.Left);
-            AddColumn(listView, "设备名称", 150, HorizontalAlignment.Left);
-            AddColumn(listView, "MAC 地址", 150, HorizontalAlignment.Left);
-            AddColumn(listView, "厂商前缀", 90, HorizontalAlignment.Left);
-            AddColumn(listView, "开放端口", 180, HorizontalAlignment.Left);
-            AddColumn(listView, "角色", 110, HorizontalAlignment.Left);
-            AddColumn(listView, "可信度", 70, HorizontalAlignment.Left);
-            AddColumn(listView, "识别依据", 190, HorizontalAlignment.Left);
-            AddColumn(listView, "深度测速", 150, HorizontalAlignment.Left);
+            AddColumn(listView, "#", 32, HorizontalAlignment.Right);
+            AddColumn(listView, "IP 地址", 104, HorizontalAlignment.Left);
+            AddColumn(listView, "设备名称", 120, HorizontalAlignment.Left);
+            AddColumn(listView, "MAC 地址", 132, HorizontalAlignment.Left);
+            AddColumn(listView, "厂商", 72, HorizontalAlignment.Left);
+            AddColumn(listView, "端口", 112, HorizontalAlignment.Left);
+            AddColumn(listView, "角色", 88, HorizontalAlignment.Left);
+            AddColumn(listView, "可信度", 52, HorizontalAlignment.Left);
+            AddColumn(listView, "依据", 126, HorizontalAlignment.Left);
+            AddColumn(listView, "测速", 92, HorizontalAlignment.Left);
         }
 
         private static void AddColumn(ListView lv, string text, int width, HorizontalAlignment align)

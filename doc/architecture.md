@@ -343,7 +343,7 @@
 | 原子写 | 写 `MQNetScan.ini.tmp` → `Flush` + `File.Replace` 或 `File.Delete`+`File.Move`；目标不存在时直接 `Move` |
 | 容错 | 每个键读取走 `TryGetInt/TryGetBool` 模式：失败即用默认值，并累积“配置项无效”提示列表，由 UI 在状态栏一次性展示 |
 | 只读目录 | 写失败捕获 `UnauthorizedAccessException`，转成“配置无法保存”提示，**不抛未捕获异常** |
-| 缺省生成 | ini 不存在时按内置默认值生成完整文件（含端口规则默认 12 条） |
+| 缺省生成 | ini 不存在时按内置默认值生成完整文件（含端口规则默认 10 条） |
 
 ---
 

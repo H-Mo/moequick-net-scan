@@ -64,7 +64,7 @@ namespace MQNetScan.Tests
             TestRunner.AssertEqual(false, result.FileExisted, "FileExisted 为 false");
             TestRunner.AssertEqual(IniSchema.DefaultMaxConcurrency, result.Settings.MaxConcurrency, "并发数为默认 32");
             TestRunner.AssertEqual(IniSchema.DefaultPortTimeoutMs, result.Settings.PortTimeoutMs, "超时为默认 800");
-            TestRunner.AssertEqual(12, result.Settings.PortRules.Count, "端口规则为内置 12 条");
+            TestRunner.AssertEqual(10, result.Settings.PortRules.Count, "端口规则为内置 10 条");
 
             // 保存后应真实生成文件
             string error;

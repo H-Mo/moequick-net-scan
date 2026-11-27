@@ -23,7 +23,7 @@ namespace MQNetScan.Tests
         private static void TestFirstRunGenerateThenLoad()
         {
             Console.WriteLine();
-            Console.WriteLine("[S1-REG] 首运行生成 ini 后能读回 12 条规则");
+            Console.WriteLine("[S1-REG] 首运行生成 ini 后能读回 10 条规则");
             TestRunner.BeginCase("Save(默认) → Load → 规则数 12、无警告");
 
             string dir = Path.Combine(Path.GetTempPath(), "MQReg_" + Guid.NewGuid().ToString("N"));
@@ -36,8 +36,8 @@ namespace MQNetScan.Tests
                 // 模拟首运行：用默认设置保存
                 AppSettings defaults = new AppSettings();
 
-                TestRunner.AssertEqual(12, defaults.PortRules.Count,
-                    "默认设置自带 12 条规则");
+                TestRunner.AssertEqual(10, defaults.PortRules.Count,
+                    "默认设置自带 10 条规则");
 
                 string err;
                 bool ok = SettingsService.Save(defaults, path, out err);
@@ -56,8 +56,8 @@ namespace MQNetScan.Tests
                     Console.WriteLine("         - " + r.Warnings[i]);
                 }
 
-                TestRunner.AssertEqual(12, r.Settings.PortRules.Count,
-                    "读回 12 条规则（不应出现「未读到任何端口规则」）");
+                TestRunner.AssertEqual(10, r.Settings.PortRules.Count,
+                    "读回 10 条规则（不应出现「未读到任何端口规则」）");
 
                 // 不应出现"未读到任何端口规则"这类告警
                 bool hasNoRuleWarning = false;
@@ -88,11 +88,11 @@ namespace MQNetScan.Tests
         {
             Console.WriteLine();
             Console.WriteLine("[S1-REG] 默认端口规则内容校验");
-            TestRunner.BeginCase("内置 12 条规则的角色与端口");
+            TestRunner.BeginCase("内置 10 条规则的角色与端口");
 
             AppSettings s = new AppSettings();
 
-            int[] expectedPorts = { 9100, 515, 631, 4001, 5000, 8000, 3000, 1433, 445, 3389, 135, 5555 };
+            int[] expectedPorts = { 9100, 515, 631, 3001, 4001, 1433, 445, 3389, 135, 5555 };
 
             for (int i = 0; i < expectedPorts.Length; i++)
             {
@@ -108,7 +108,7 @@ namespace MQNetScan.Tests
             // 启用端口集合应去重且升序
             int[] enabled = s.GetEnabledPorts();
 
-            TestRunner.AssertEqual(12, enabled.Length, "启用端口 12 个");
+            TestRunner.AssertEqual(10, enabled.Length, "启用端口 10 个");
 
             bool ascending = true;
             for (int i = 1; i < enabled.Length; i++)

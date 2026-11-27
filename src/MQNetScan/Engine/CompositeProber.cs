@@ -225,7 +225,7 @@ namespace MQNetScan.Engine
             else if (role == RolePriority.RoleScale)
             {
                 record.Confidence = DeviceConfidence.Medium;
-                record.Evidence = "电子秤通讯端口（3000/4001/5000/8000）";
+                record.Evidence = "电子秤通讯端口（3001/4001）";
                 record.DetectionSource = "Ports";
             }
             else if (role == RolePriority.RoleLocalServer)

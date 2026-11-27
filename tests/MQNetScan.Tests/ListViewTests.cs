@@ -40,18 +40,21 @@ namespace MQNetScan.Tests
         {
             Console.WriteLine();
             Console.WriteLine("[S6-1] 列定义（PRD §6.6）");
-            TestRunner.BeginCase("7 列、顺序固定、Details 视图");
+            TestRunner.BeginCase("紧凑列宽、顺序固定、Details 视图");
 
             using (ListView lv = CreateList())
             {
                 TestRunner.AssertEqual(ListViewHelper.ColumnCount, lv.Columns.Count, "列表列数符合当前定义");
+                int totalWidth = 0;
+                for (int i = 0; i < lv.Columns.Count; i++) { totalWidth += lv.Columns[i].Width; }
+                TestRunner.AssertTrue(totalWidth <= 1000, "结果表总宽度不超过 1000px（实际 " + totalWidth + "px）");
                 TestRunner.AssertEqual(View.Details, lv.View, "视图为 Details");
                 TestRunner.AssertTrue(lv.FullRowSelect, "整行选中");
                 TestRunner.AssertTrue(lv.GridLines, "显示网格线");
                 TestRunner.AssertTrue(lv.MultiSelect, "支持多选");
                 TestRunner.AssertTrue(!lv.LabelEdit, "禁止就地编辑");
 
-                string[] expected = { "#", "IP 地址", "设备名称", "MAC 地址", "厂商前缀", "开放端口", "角色", "可信度", "识别依据", "深度测速" };
+                string[] expected = { "#", "IP 地址", "设备名称", "MAC 地址", "厂商", "端口", "角色", "可信度", "依据", "测速" };
 
                 for (int i = 0; i < expected.Length; i++)
                 {

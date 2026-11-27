@@ -65,7 +65,7 @@ namespace MQNetScan.Tests
         private static void TestBindAndRefreshRules()
         {
             Console.WriteLine();
-            Console.WriteLine("[S12-2] 绑定后规则列表显示 12 条");
+            Console.WriteLine("[S12-2] 绑定后规则列表显示 10 条");
             TestRunner.BeginCase("行数与内容正确");
 
             using (SettingsPage page = CreatePage())
@@ -219,14 +219,14 @@ namespace MQNetScan.Tests
         {
             Console.WriteLine();
             Console.WriteLine("[S12-6] 恢复内置规则（PRD FR-4.2.4）");
-            TestRunner.BeginCase("恢复后与 PRD §7.1 的 12 条完全一致");
+            TestRunner.BeginCase("恢复后与 PRD §7.1 的 10 条完全一致");
 
             AppSettings freshSettings = new AppSettings();
             List<PortRule> fresh = freshSettings.PortRules;
 
-            TestRunner.AssertEqual(12, fresh.Count, "内置 12 条");
+            TestRunner.AssertEqual(10, fresh.Count, "内置 10 条");
 
-            int[] expectedPorts = { 9100, 515, 631, 4001, 5000, 8000, 3000, 1433, 445, 3389, 135, 5555 };
+            int[] expectedPorts = { 9100, 515, 631, 3001, 4001, 1433, 445, 3389, 135, 5555 };
 
             for (int i = 0; i < expectedPorts.Length; i++)
             {
@@ -292,8 +292,8 @@ namespace MQNetScan.Tests
                 // 3. 重新加载
                 ConfigLoadResult r2 = SettingsService.Load(path);
 
-                TestRunner.AssertEqual(12, r2.Settings.PortRules.Count,
-                    "11（删 1）+1（加 1）= 12 条");
+                TestRunner.AssertEqual(10, r2.Settings.PortRules.Count,
+                    "9（删 1）+1（加 1）= 10 条");
 
                 bool hasCustom = false;
                 bool no5555 = true;
@@ -341,13 +341,13 @@ namespace MQNetScan.Tests
         {
             Console.WriteLine();
             Console.WriteLine("[S12-8] 恢复出厂设置（PRD FR-4.1.3）");
-            TestRunner.BeginCase("并发回 32、超时回 800、规则回内置 12 条");
+            TestRunner.BeginCase("并发回 32、超时回 800、规则回内置 10 条");
 
             AppSettings fresh = new AppSettings();
 
             TestRunner.AssertEqual(32, fresh.MaxConcurrency, "并发默认 32");
             TestRunner.AssertEqual(800, fresh.PortTimeoutMs, "超时默认 800");
-            TestRunner.AssertEqual(12, fresh.PortRules.Count, "规则默认 12 条");
+            TestRunner.AssertEqual(10, fresh.PortRules.Count, "规则默认 10 条");
             TestRunner.AssertEqual(true, fresh.EnableRedBanner, "预警区默认启用");
             TestRunner.AssertEqual(1, fresh.SendArpRetry, "ARP 重试默认 1");
 
@@ -363,7 +363,7 @@ namespace MQNetScan.Tests
 
             TestRunner.AssertEqual(32, modified.MaxConcurrency, "恢复后并发 32");
             TestRunner.AssertEqual(800, modified.PortTimeoutMs, "恢复后超时 800");
-            TestRunner.AssertEqual(12, modified.PortRules.Count, "恢复后规则 12 条");
+            TestRunner.AssertEqual(10, modified.PortRules.Count, "恢复后规则 10 条");
 
             bool has8082 = ContainsPort(modified.PortRules, 8082);
             TestRunner.AssertTrue(!has8082, "自定义规则被清除");

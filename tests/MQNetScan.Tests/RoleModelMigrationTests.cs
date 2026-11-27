@@ -164,7 +164,7 @@ namespace MQNetScan.Tests
             TestRunner.AssertTrue(ContainsRole(roles, "本地服务器", "1433"), "本地服务器含 1433");
             TestRunner.AssertTrue(ContainsRole(roles, "Windows 电脑", "135,445,3389"), "Windows 电脑含 3 端口");
             TestRunner.AssertTrue(ContainsRole(roles, "打印机", "515,631,9100"), "打印机含 3 端口");
-            TestRunner.AssertTrue(ContainsRole(roles, "电子秤", "3000,4001,5000,8000"), "电子秤含 4 端口");
+            TestRunner.AssertTrue(ContainsRole(roles, "电子秤", "3001,4001"), "电子秤含 3001/4001 端口");
             TestRunner.AssertTrue(ContainsRole(roles, "安卓设备", "5555"), "安卓设备含 5555");
         }
 

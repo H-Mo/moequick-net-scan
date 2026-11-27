@@ -73,7 +73,7 @@ namespace MQNetScan.Engine.Contracts
         public const int LocalServer = 10;      // 本地服务器（1433）
         public const int WindowsPc = 20;        // Windows 电脑（445/3389/135）
         public const int Printer = 30;          // 打印机（9100/515/631）
-        public const int Scale = 40;            // 电子秤（4001/5000/8000/3000）
+        public const int Scale = 40;            // 电子秤（3001/4001）
         public const int AndroidDevice = 50;    // 安卓设备（5555）
         public const int NetworkDevice = 80;    // 网络设备（仅 80/443）
         public const int Custom = 90;           // 用户自定义角色（排在内置之后）
