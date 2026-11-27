@@ -28,6 +28,7 @@ namespace MQNetScan.Tests
                     TestRoundTrip();
                 TestProbeModeSettingsRoundTrip();
                 TestScaleDefaultPortMigration();
+                TestReportedScalePortMigration();
                 TestInvalidValuesFallback();
                 TestBrokenFileDoesNotThrow();
                 TestReadOnlyDirectory();
@@ -168,6 +169,25 @@ namespace MQNetScan.Tests
             {
                 TestRunner.AssertEqual("3001,4001,8000", custom.PortsText, "不覆盖用户自定义端口");
             }
+        }
+
+        private static void TestReportedScalePortMigration()
+        {
+            Console.WriteLine();
+            Console.WriteLine("[SCALE-MIGRATION-OLD] 迁移现场旧电子秤规则");
+            TestRunner.BeginCase("3001、4000、5000、6000 自动迁移至指定三端口");
+            string path = NewPath("reported-old-scale.ini");
+            string ini = "[Role.1]\r\nName=电子秤\r\nPorts=3001,4000,5000,6000\r\nComment=计价秤\r\nEnabled=true\r\n";
+            File.WriteAllText(path, ini, new UTF8Encoding(false));
+
+            ConfigLoadResult result = SettingsService.Load(path);
+            RoleDefinition scale = result.Settings.FindRole("电子秤");
+            TestRunner.AssertTrue(scale != null, "找到电子秤规则");
+            if (scale != null)
+            {
+                TestRunner.AssertEqual("3001,4001,5001", scale.PortsText, "迁移成目标端口组合");
+            }
+            TestRunner.AssertTrue(Contains(result.Warnings, "默认端口已更新"), "记录迁移警告供启动写回");
         }
 
         private static bool Contains(IList<string> values, string text)

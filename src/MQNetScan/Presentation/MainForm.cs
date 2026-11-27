@@ -78,6 +78,14 @@ namespace MQNetScan.Presentation
                     ShowStatus(error, true);
                 }
             }
+            else if (NeedsScalePortMigration(result))
+            {
+                string error;
+                if (!SettingsService.Save(_settings, _configPath, out error))
+                {
+                    ShowStatus("电子秤端口规则已更新，但无法保存配置：" + error, true);
+                }
+            }
             else if (NeedsRuleRepair(result))
             {
                 // ini 存在但端口规则读不出来（例如文件被清空、只剩注释，
@@ -116,6 +124,20 @@ namespace MQNetScan.Presentation
         /// 加载过程中出现了"未读到任何端口规则"的告警，
         /// 说明文件存在但规则缺失，需要回写默认规则。
         /// </summary>
+        private static bool NeedsScalePortMigration(ConfigLoadResult result)
+        {
+            if (result == null || result.Warnings == null) { return false; }
+            for (int i = 0; i < result.Warnings.Count; i++)
+            {
+                if (result.Warnings[i] != null
+                    && result.Warnings[i].IndexOf("电子秤默认端口已更新", StringComparison.Ordinal) >= 0)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         private static bool NeedsRuleRepair(ConfigLoadResult result)
         {
             if (result == null || result.Warnings == null) { return false; }

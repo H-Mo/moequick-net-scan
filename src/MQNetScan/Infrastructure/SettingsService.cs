@@ -284,15 +284,19 @@ namespace MQNetScan.Infrastructure
             for (int i = 0; i < roles.Count; i++)
             {
                 RoleDefinition role = roles[i];
-                if (role.Name != "电子秤" || role.Ports.Length != 2
-                    || !ContainsPort(role.Ports, 3001) || !ContainsPort(role.Ports, 4001))
-                {
-                    continue;
-                }
+                if (role.Name != "电子秤") { continue; }
+
+                int[] ports = role.Ports;
+                bool oldV12Default = ports.Length == 2
+                    && ContainsPort(ports, 3001) && ContainsPort(ports, 4001);
+                bool reportedOldDefault = ports.Length == 4
+                    && ContainsPort(ports, 3001) && ContainsPort(ports, 4000)
+                    && ContainsPort(ports, 5000) && ContainsPort(ports, 6000);
+                if (!oldV12Default && !reportedOldDefault) { continue; }
 
                 roles[i] = new RoleDefinition(role.Name, new int[] { 3001, 4001, 5001 },
                     role.Comment, role.Enabled);
-                warnings.Add("电子秤内置端口已更新为 3001、4001、5001；保存设置后写入新规则。");
+                warnings.Add("电子秤默认端口已更新为 3001、4001、5001，并已修正旧配置。");
                 return;
             }
         }
