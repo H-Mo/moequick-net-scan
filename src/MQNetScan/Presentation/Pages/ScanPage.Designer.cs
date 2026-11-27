@@ -105,7 +105,7 @@ namespace MQNetScan.Presentation.Pages
             this.grpTarget.Controls.Add(this.lblAdapter);
             this.grpTarget.Location = new System.Drawing.Point(14, 10);
             this.grpTarget.Name = "grpTarget";
-            this.grpTarget.Size = new System.Drawing.Size(840, 190);
+            this.grpTarget.Size = new System.Drawing.Size(840, 146);
             this.grpTarget.TabIndex = 0;
             this.grpTarget.TabStop = false;
             this.grpTarget.Text = "扫描目标";
@@ -191,14 +191,14 @@ namespace MQNetScan.Presentation.Pages
 
             // lblProbeMode
             this.lblProbeMode.AutoSize = true;
-            this.lblProbeMode.Location = new System.Drawing.Point(18, 91);
+            this.lblProbeMode.Location = new System.Drawing.Point(18, 84);
             this.lblProbeMode.Name = "lblProbeMode";
             this.lblProbeMode.Size = new System.Drawing.Size(65, 12);
             this.lblProbeMode.TabIndex = 11;
             this.lblProbeMode.Text = "探测方式：";
 
             // pnlProbeMode
-            this.pnlProbeMode.Location = new System.Drawing.Point(95, 85);
+            this.pnlProbeMode.Location = new System.Drawing.Point(95, 78);
             this.pnlProbeMode.Name = "pnlProbeMode";
             this.pnlProbeMode.Size = new System.Drawing.Size(115, 24);
             this.pnlProbeMode.TabIndex = 12;
@@ -230,21 +230,21 @@ namespace MQNetScan.Presentation.Pages
             // lblProbeHint
             this.lblProbeHint.AutoSize = true;
             this.lblProbeHint.ForeColor = System.Drawing.Color.FromArgb(100, 100, 100);
-            this.lblProbeHint.Location = new System.Drawing.Point(220, 91);
+            this.lblProbeHint.Location = new System.Drawing.Point(220, 84);
             this.lblProbeHint.Name = "lblProbeHint";
             this.lblProbeHint.Size = new System.Drawing.Size(0, 12);
             this.lblProbeHint.TabIndex = 14;
 
             // lblPreview
             this.lblPreview.AutoSize = true;
-            this.lblPreview.Location = new System.Drawing.Point(18, 116);
+            this.lblPreview.Location = new System.Drawing.Point(18, 106);
             this.lblPreview.Name = "lblPreview";
             this.lblPreview.Size = new System.Drawing.Size(0, 12);
             this.lblPreview.TabIndex = 9;
 
             // lblValidation
             this.lblValidation.AutoSize = true;
-            this.lblValidation.Location = new System.Drawing.Point(18, 142);
+            this.lblValidation.Location = new System.Drawing.Point(18, 130);
             this.lblValidation.MaximumSize = new System.Drawing.Size(800, 0);
             this.lblValidation.Name = "lblValidation";
             this.lblValidation.Size = new System.Drawing.Size(0, 12);
@@ -253,14 +253,14 @@ namespace MQNetScan.Presentation.Pages
             // lblAdapterWarning（放在分组框外，独立一行，避免压住边框）
             this.lblAdapterWarning.AutoSize = true;
             this.lblAdapterWarning.ForeColor = System.Drawing.Color.FromArgb(180, 100, 0);
-            this.lblAdapterWarning.Location = new System.Drawing.Point(18, 210);
+            this.lblAdapterWarning.Location = new System.Drawing.Point(18, 166);
             this.lblAdapterWarning.MaximumSize = new System.Drawing.Size(840, 0);
             this.lblAdapterWarning.Name = "lblAdapterWarning";
             this.lblAdapterWarning.Size = new System.Drawing.Size(0, 12);
             this.lblAdapterWarning.TabIndex = 1;
 
             // btnStartScan
-            this.btnStartScan.Location = new System.Drawing.Point(14, 238);
+            this.btnStartScan.Location = new System.Drawing.Point(14, 194);
             this.btnStartScan.Name = "btnStartScan";
             this.btnStartScan.Size = new System.Drawing.Size(104, 30);
             this.btnStartScan.TabIndex = 2;
@@ -270,7 +270,7 @@ namespace MQNetScan.Presentation.Pages
 
             // btnPause
             this.btnPause.Enabled = false;
-            this.btnPause.Location = new System.Drawing.Point(126, 238);
+            this.btnPause.Location = new System.Drawing.Point(126, 194);
             this.btnPause.Name = "btnPause";
             this.btnPause.Size = new System.Drawing.Size(88, 30);
             this.btnPause.TabIndex = 3;
@@ -280,7 +280,7 @@ namespace MQNetScan.Presentation.Pages
 
             // btnStop
             this.btnStop.Enabled = false;
-            this.btnStop.Location = new System.Drawing.Point(222, 238);
+            this.btnStop.Location = new System.Drawing.Point(222, 194);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(88, 30);
             this.btnStop.TabIndex = 4;
@@ -289,7 +289,7 @@ namespace MQNetScan.Presentation.Pages
             this.btnStop.Click += new System.EventHandler(this.OnStopClick);
 
             // progressBar
-            this.progressBar.Location = new System.Drawing.Point(326, 242);
+            this.progressBar.Location = new System.Drawing.Point(326, 198);
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(528, 22);
             this.progressBar.TabIndex = 5;
@@ -297,7 +297,7 @@ namespace MQNetScan.Presentation.Pages
             // lblScanStatus
             this.lblScanStatus.AutoSize = true;
             this.lblScanStatus.ForeColor = System.Drawing.Color.FromArgb(90, 90, 90);
-            this.lblScanStatus.Location = new System.Drawing.Point(14, 278);
+            this.lblScanStatus.Location = new System.Drawing.Point(14, 234);
             this.lblScanStatus.MaximumSize = new System.Drawing.Size(840, 0);
             this.lblScanStatus.Name = "lblScanStatus";
             this.lblScanStatus.Size = new System.Drawing.Size(0, 12);
@@ -315,9 +315,9 @@ namespace MQNetScan.Presentation.Pages
             this.listHosts.FullRowSelect = true;
             this.listHosts.GridLines = true;
             this.listHosts.HideSelection = false;
-            this.listHosts.Location = new System.Drawing.Point(14, 334);
+            this.listHosts.Location = new System.Drawing.Point(14, 290);
             this.listHosts.Name = "listHosts";
-            this.listHosts.Size = new System.Drawing.Size(840, 194);
+            this.listHosts.Size = new System.Drawing.Size(840, 238);
             this.listHosts.TabIndex = 7;
             this.listHosts.UseCompatibleStateImageBehavior = false;
             this.listHosts.View = System.Windows.Forms.View.Details;
@@ -382,7 +382,7 @@ namespace MQNetScan.Presentation.Pages
             this.miSingleTest.Click += new System.EventHandler(this.OnSingleTestClick);
 
             // btnExport
-            this.btnExport.Location = new System.Drawing.Point(14, 298);
+            this.btnExport.Location = new System.Drawing.Point(14, 254);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(110, 24);
             this.btnExport.TabIndex = 8;
@@ -392,7 +392,7 @@ namespace MQNetScan.Presentation.Pages
 
             // btnOpenReportFolder
             this.btnOpenReportFolder.Enabled = false;
-            this.btnOpenReportFolder.Location = new System.Drawing.Point(132, 298);
+            this.btnOpenReportFolder.Location = new System.Drawing.Point(132, 254);
             this.btnOpenReportFolder.Name = "btnOpenReportFolder";
             this.btnOpenReportFolder.Size = new System.Drawing.Size(130, 24);
             this.btnOpenReportFolder.TabIndex = 9;

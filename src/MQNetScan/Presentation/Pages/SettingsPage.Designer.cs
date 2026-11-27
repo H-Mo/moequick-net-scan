@@ -104,7 +104,7 @@ namespace MQNetScan.Presentation.Pages
             this.grpScanParams.Controls.Add(this.lblConcurrency);
             this.grpScanParams.Location = new System.Drawing.Point(18, 18);
             this.grpScanParams.Name = "grpScanParams";
-            this.grpScanParams.Size = new System.Drawing.Size(600, 210);
+            this.grpScanParams.Size = new System.Drawing.Size(848, 120);
             this.grpScanParams.TabIndex = 0;
             this.grpScanParams.TabStop = false;
             this.grpScanParams.Text = "扫描参数";
@@ -137,7 +137,7 @@ namespace MQNetScan.Presentation.Pages
 
             // lblTimeout
             this.lblTimeout.AutoSize = true;
-            this.lblTimeout.Location = new System.Drawing.Point(20, 74);
+            this.lblTimeout.Location = new System.Drawing.Point(430, 34);
             this.lblTimeout.Name = "lblTimeout";
             this.lblTimeout.Size = new System.Drawing.Size(101, 12);
             this.lblTimeout.TabIndex = 3;
@@ -145,7 +145,7 @@ namespace MQNetScan.Presentation.Pages
 
             // numTimeout
             this.numTimeout.Increment = new decimal(new int[] { 50, 0, 0, 0 });
-            this.numTimeout.Location = new System.Drawing.Point(130, 71);
+            this.numTimeout.Location = new System.Drawing.Point(540, 31);
             this.numTimeout.Maximum = new decimal(new int[] { 5000, 0, 0, 0 });
             this.numTimeout.Minimum = new decimal(new int[] { 200, 0, 0, 0 });
             this.numTimeout.Name = "numTimeout";
@@ -156,14 +156,14 @@ namespace MQNetScan.Presentation.Pages
             // lblTimeoutHint
             this.lblTimeoutHint.AutoSize = true;
             this.lblTimeoutHint.ForeColor = System.Drawing.Color.FromArgb(120, 120, 120);
-            this.lblTimeoutHint.Location = new System.Drawing.Point(222, 74);
+            this.lblTimeoutHint.Location = new System.Drawing.Point(632, 34);
             this.lblTimeoutHint.Name = "lblTimeoutHint";
             this.lblTimeoutHint.Size = new System.Drawing.Size(0, 12);
             this.lblTimeoutHint.TabIndex = 5;
 
             // lblPingTimeout
             this.lblPingTimeout.AutoSize = true;
-            this.lblPingTimeout.Location = new System.Drawing.Point(20, 114);
+            this.lblPingTimeout.Location = new System.Drawing.Point(20, 78);
             this.lblPingTimeout.Name = "lblPingTimeout";
             this.lblPingTimeout.Size = new System.Drawing.Size(101, 12);
             this.lblPingTimeout.TabIndex = 6;
@@ -171,7 +171,7 @@ namespace MQNetScan.Presentation.Pages
 
             // numPingTimeout
             this.numPingTimeout.Increment = new decimal(new int[] { 100, 0, 0, 0 });
-            this.numPingTimeout.Location = new System.Drawing.Point(130, 111);
+            this.numPingTimeout.Location = new System.Drawing.Point(130, 75);
             this.numPingTimeout.Maximum = new decimal(new int[] { 5000, 0, 0, 0 });
             this.numPingTimeout.Minimum = new decimal(new int[] { 200, 0, 0, 0 });
             this.numPingTimeout.Name = "numPingTimeout";
@@ -181,14 +181,14 @@ namespace MQNetScan.Presentation.Pages
 
             // lblPingRetry
             this.lblPingRetry.AutoSize = true;
-            this.lblPingRetry.Location = new System.Drawing.Point(20, 154);
+            this.lblPingRetry.Location = new System.Drawing.Point(430, 78);
             this.lblPingRetry.Name = "lblPingRetry";
             this.lblPingRetry.Size = new System.Drawing.Size(101, 12);
             this.lblPingRetry.TabIndex = 8;
             this.lblPingRetry.Text = "Ping 尝试次数：";
 
             // numPingRetry
-            this.numPingRetry.Location = new System.Drawing.Point(130, 151);
+            this.numPingRetry.Location = new System.Drawing.Point(540, 75);
             this.numPingRetry.Maximum = new decimal(new int[] { 3, 0, 0, 0 });
             this.numPingRetry.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             this.numPingRetry.Name = "numPingRetry";
@@ -197,7 +197,7 @@ namespace MQNetScan.Presentation.Pages
             this.numPingRetry.Value = new decimal(new int[] { 1, 0, 0, 0 });
 
             // btnSave
-            this.btnSave.Location = new System.Drawing.Point(18, 250);
+            this.btnSave.Location = new System.Drawing.Point(18, 160);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(100, 28);
             this.btnSave.TabIndex = 1;
@@ -206,7 +206,7 @@ namespace MQNetScan.Presentation.Pages
             this.btnSave.Click += new System.EventHandler(this.OnSaveClick);
 
             // btnRestoreDefaults
-            this.btnRestoreDefaults.Location = new System.Drawing.Point(130, 250);
+            this.btnRestoreDefaults.Location = new System.Drawing.Point(130, 160);
             this.btnRestoreDefaults.Name = "btnRestoreDefaults";
             this.btnRestoreDefaults.Size = new System.Drawing.Size(100, 28);
             this.btnRestoreDefaults.TabIndex = 2;
@@ -216,7 +216,7 @@ namespace MQNetScan.Presentation.Pages
 
             // lblConfigPath
             this.lblConfigPath.AutoSize = true;
-            this.lblConfigPath.Location = new System.Drawing.Point(18, 290);
+            this.lblConfigPath.Location = new System.Drawing.Point(18, 200);
             this.lblConfigPath.Name = "lblConfigPath";
             this.lblConfigPath.Size = new System.Drawing.Size(77, 12);
             this.lblConfigPath.TabIndex = 3;
@@ -225,7 +225,7 @@ namespace MQNetScan.Presentation.Pages
             // lblConfigPathValue
             this.lblConfigPathValue.AutoSize = true;
             this.lblConfigPathValue.ForeColor = System.Drawing.Color.FromArgb(90, 90, 90);
-            this.lblConfigPathValue.Location = new System.Drawing.Point(101, 290);
+            this.lblConfigPathValue.Location = new System.Drawing.Point(101, 200);
             this.lblConfigPathValue.Name = "lblConfigPathValue";
             this.lblConfigPathValue.Size = new System.Drawing.Size(0, 12);
             this.lblConfigPathValue.TabIndex = 4;
@@ -233,7 +233,7 @@ namespace MQNetScan.Presentation.Pages
             // lblPhaseNote
             this.lblPhaseNote.AutoSize = true;
             this.lblPhaseNote.ForeColor = System.Drawing.Color.FromArgb(120, 120, 120);
-            this.lblPhaseNote.Location = new System.Drawing.Point(18, 314);
+            this.lblPhaseNote.Location = new System.Drawing.Point(18, 224);
             this.lblPhaseNote.MaximumSize = new System.Drawing.Size(700, 0);
             this.lblPhaseNote.Name = "lblPhaseNote";
             this.lblPhaseNote.Size = new System.Drawing.Size(0, 12);
@@ -246,9 +246,9 @@ namespace MQNetScan.Presentation.Pages
             this.grpRules.Controls.Add(this.btnEditRule);
             this.grpRules.Controls.Add(this.btnAddRule);
             this.grpRules.Controls.Add(this.listRules);
-            this.grpRules.Location = new System.Drawing.Point(18, 338);
+            this.grpRules.Location = new System.Drawing.Point(18, 248);
             this.grpRules.Name = "grpRules";
-            this.grpRules.Size = new System.Drawing.Size(848, 186);
+            this.grpRules.Size = new System.Drawing.Size(848, 276);
             this.grpRules.TabIndex = 6;
             this.grpRules.TabStop = false;
             this.grpRules.Text = "端口特征规则表（决定设备角色判定）";
@@ -261,7 +261,7 @@ namespace MQNetScan.Presentation.Pages
             this.listRules.Location = new System.Drawing.Point(12, 22);
             this.listRules.MultiSelect = false;
             this.listRules.Name = "listRules";
-            this.listRules.Size = new System.Drawing.Size(560, 122);
+            this.listRules.Size = new System.Drawing.Size(560, 202);
             this.listRules.TabIndex = 0;
             this.listRules.UseCompatibleStateImageBehavior = false;
             this.listRules.View = System.Windows.Forms.View.Details;
@@ -277,7 +277,7 @@ namespace MQNetScan.Presentation.Pages
             this.btnAddRule.Click += new System.EventHandler(this.OnAddRuleClick);
 
             // btnEditRule
-            this.btnEditRule.Location = new System.Drawing.Point(584, 54);
+            this.btnEditRule.Location = new System.Drawing.Point(704, 22);
             this.btnEditRule.Name = "btnEditRule";
             this.btnEditRule.Size = new System.Drawing.Size(110, 26);
             this.btnEditRule.TabIndex = 2;
@@ -286,7 +286,7 @@ namespace MQNetScan.Presentation.Pages
             this.btnEditRule.Click += new System.EventHandler(this.OnEditRuleClick);
 
             // btnDeleteRule
-            this.btnDeleteRule.Location = new System.Drawing.Point(584, 86);
+            this.btnDeleteRule.Location = new System.Drawing.Point(584, 54);
             this.btnDeleteRule.Name = "btnDeleteRule";
             this.btnDeleteRule.Size = new System.Drawing.Size(110, 26);
             this.btnDeleteRule.TabIndex = 3;
@@ -295,7 +295,7 @@ namespace MQNetScan.Presentation.Pages
             this.btnDeleteRule.Click += new System.EventHandler(this.OnDeleteRuleClick);
 
             // btnRestoreRules
-            this.btnRestoreRules.Location = new System.Drawing.Point(584, 118);
+            this.btnRestoreRules.Location = new System.Drawing.Point(704, 54);
             this.btnRestoreRules.Name = "btnRestoreRules";
             this.btnRestoreRules.Size = new System.Drawing.Size(110, 26);
             this.btnRestoreRules.TabIndex = 4;

@@ -27,6 +27,7 @@ namespace MQNetScan.Tests
                 TestMissingFileGeneratesDefaults();
                     TestRoundTrip();
                 TestProbeModeSettingsRoundTrip();
+                TestSaasDomainMigration();
                 TestScaleDefaultPortMigration();
                 TestReportedScalePortMigration();
                 TestInvalidValuesFallback();
@@ -139,6 +140,26 @@ namespace MQNetScan.Tests
             TestRunner.AssertEqual((int)ProbeMode.Arp, old.Settings.LastProbeMode, "旧配置默认 ARP");
             TestRunner.AssertEqual(IniSchema.DefaultPingTimeoutMs, old.Settings.PingTimeoutMs, "旧配置 Ping 超时用默认值");
             TestRunner.AssertEqual(IniSchema.DefaultPingRetry, old.Settings.PingRetry, "旧配置 Ping 次数用默认值");
+        }
+
+        private static void TestSaasDomainMigration()
+        {
+            Console.WriteLine();
+            Console.WriteLine("[SELF-CHECK-MIGRATION] 默认自测域名更新");
+            TestRunner.BeginCase("旧占位域名迁移到阿里云，自定义域名不变");
+
+            string legacyPath = NewPath("legacy-saas.ini");
+            File.WriteAllText(legacyPath,
+                "[SelfCheck]\r\nSaasDomain=www.sissyun.com\r\n", new UTF8Encoding(false));
+            ConfigLoadResult legacy = SettingsService.Load(legacyPath);
+            TestRunner.AssertEqual("www.aliyun.com", legacy.Settings.SaasDomain, "旧默认迁移为阿里云");
+            TestRunner.AssertTrue(Contains(legacy.Warnings, "阿里云"), "迁移给出提示");
+
+            string customPath = NewPath("custom-saas.ini");
+            File.WriteAllText(customPath,
+                "[SelfCheck]\r\nSaasDomain=scan.example.net\r\n", new UTF8Encoding(false));
+            ConfigLoadResult custom = SettingsService.Load(customPath);
+            TestRunner.AssertEqual("scan.example.net", custom.Settings.SaasDomain, "保留自定义域名");
         }
 
         private static void TestScaleDefaultPortMigration()

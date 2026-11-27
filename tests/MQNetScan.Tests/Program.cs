@@ -26,6 +26,7 @@ namespace MQNetScan.Tests
                 NetSegmentTests.Run();
                 ScanPageTests.Run();
                 ScanLayoutTests.Run();
+                SettingsLayoutTests.Run();
                 ScanSessionTests.Run();
                 ScanPageScanTests.Run();
                 ListViewTests.Run();

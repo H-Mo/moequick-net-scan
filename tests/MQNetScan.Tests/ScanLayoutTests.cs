@@ -34,6 +34,9 @@ namespace MQNetScan.Tests
                     "结果列表不遮挡导出按钮");
                 TestRunner.AssertTrue(!list.Bounds.IntersectsWith(folder.Bounds),
                     "结果列表不遮挡文件夹按钮");
+                Control target = Get<Control>(page, "grpTarget");
+                TestRunner.AssertTrue(target.Height <= 150, "扫描目标区域已收紧（实际 " + target.Height + "px）");
+                TestRunner.AssertTrue(list.Height >= 230, "扫描列表高度增加（实际 " + list.Height + "px）");
                 TestRunner.AssertTrue(list.Bottom <= page.ClientSize.Height,
                     "结果列表位于页面可见区域");
             }

@@ -102,10 +102,9 @@ namespace MQNetScan.Infrastructure
         public const string DefaultTimestampFormat = "yyyyMMdd_HHmmss";
 
         /// <summary>
-        /// 思迅 SaaS 域名默认值。
-        /// 注意：该值需实施确认（PRD 风险 R4）；此处为占位值，界面须明示当前值。
+        /// 连通性自测默认网址：阿里云网站域名。
         /// </summary>
-        public const string DefaultSaasDomain = "www.sissyun.com";
+        public const string DefaultSaasDomain = "www.aliyun.com";
 
         public const string DefaultDnsProbeIp = "223.5.5.5";
         public const string DefaultGatewayProbePorts = "80,443";

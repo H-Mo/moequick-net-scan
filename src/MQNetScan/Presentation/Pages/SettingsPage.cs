@@ -104,6 +104,7 @@ namespace MQNetScan.Presentation.Pages
             }
 
             lblConfigPathValue.Text = configPath;
+            AutoScrollPosition = new Point(0, 0);
             UpdateConcurrencyHint();
             UpdateTimeoutHint();
 

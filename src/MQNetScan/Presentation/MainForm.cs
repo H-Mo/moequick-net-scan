@@ -78,7 +78,7 @@ namespace MQNetScan.Presentation
                     ShowStatus(error, true);
                 }
             }
-            else if (NeedsScalePortMigration(result))
+            else if (NeedsScalePortMigration(result) || NeedsSaasDomainMigration(result))
             {
                 string error;
                 if (!SettingsService.Save(_settings, _configPath, out error))
@@ -131,6 +131,20 @@ namespace MQNetScan.Presentation
             {
                 if (result.Warnings[i] != null
                     && result.Warnings[i].IndexOf("电子秤默认端口已更新", StringComparison.Ordinal) >= 0)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private static bool NeedsSaasDomainMigration(ConfigLoadResult result)
+        {
+            if (result == null || result.Warnings == null) { return false; }
+            for (int i = 0; i < result.Warnings.Count; i++)
+            {
+                if (result.Warnings[i] != null
+                    && result.Warnings[i].IndexOf("连通性自测默认网址已更新", StringComparison.Ordinal) >= 0)
                 {
                     return true;
                 }

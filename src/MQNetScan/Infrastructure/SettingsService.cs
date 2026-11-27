@@ -215,6 +215,11 @@ namespace MQNetScan.Infrastructure
                 settings.SaasDomain = store.GetString(
                     IniSchema.SectionSelfCheck, IniSchema.KeySaasDomain,
                     IniSchema.DefaultSaasDomain);
+                if (string.Equals(settings.SaasDomain, "www.sissyun.com", StringComparison.OrdinalIgnoreCase))
+                {
+                    settings.SaasDomain = IniSchema.DefaultSaasDomain;
+                    warnings.Add("连通性自测默认网址已更新为阿里云 www.aliyun.com。");
+                }
 
                 settings.DnsProbeIp = store.GetString(
                     IniSchema.SectionSelfCheck, IniSchema.KeyDnsProbeIp,
