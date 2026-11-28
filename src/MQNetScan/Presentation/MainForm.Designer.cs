@@ -9,6 +9,7 @@ namespace MQNetScan.Presentation
 
         private System.Windows.Forms.TabControl tabMain;
         private System.Windows.Forms.TabPage tabScan;
+        private System.Windows.Forms.TabPage tabLocalInfo;
         private System.Windows.Forms.TabPage tabTools;
         private System.Windows.Forms.TabPage tabSettings;
         private MQNetScan.Presentation.Common.AlertBanner alertBanner;
@@ -18,6 +19,7 @@ namespace MQNetScan.Presentation
         private System.Windows.Forms.ToolStripStatusLabel lblNetInfo;
 
         private MQNetScan.Presentation.Pages.ScanPage scanPage;
+        private MQNetScan.Presentation.Pages.LocalMachineInfoPage localInfoPage;
         private MQNetScan.Presentation.Pages.ToolsPage toolsPage;
         private MQNetScan.Presentation.Pages.SettingsPage settingsPage;
 
@@ -38,6 +40,7 @@ namespace MQNetScan.Presentation
         {
             this.tabMain = new System.Windows.Forms.TabControl();
             this.tabScan = new System.Windows.Forms.TabPage();
+            this.tabLocalInfo = new System.Windows.Forms.TabPage();
             this.tabTools = new System.Windows.Forms.TabPage();
             this.tabSettings = new System.Windows.Forms.TabPage();
             this.alertBanner = new MQNetScan.Presentation.Common.AlertBanner();
@@ -48,6 +51,7 @@ namespace MQNetScan.Presentation
             this.scanPage = new MQNetScan.Presentation.Pages.ScanPage();
             this.toolsPage = new MQNetScan.Presentation.Pages.ToolsPage();
             this.settingsPage = new MQNetScan.Presentation.Pages.SettingsPage();
+            this.localInfoPage = new MQNetScan.Presentation.Pages.LocalMachineInfoPage();
             this.tabMain.SuspendLayout();
             this.tabScan.SuspendLayout();
             this.tabTools.SuspendLayout();
@@ -57,12 +61,14 @@ namespace MQNetScan.Presentation
 
             // tabMain
             this.tabMain.Controls.Add(this.tabScan);
+            this.tabMain.Controls.Add(this.tabLocalInfo);
             this.tabMain.Controls.Add(this.tabTools);
             this.tabMain.Controls.Add(this.tabSettings);
             this.tabMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabMain.Location = new System.Drawing.Point(0, 0);
             this.tabMain.Name = "tabMain";
             this.tabMain.SelectedIndex = 0;
+            this.tabMain.SelectedIndexChanged += new System.EventHandler(this.OnMainTabChanged);
             this.tabMain.Size = new System.Drawing.Size(900, 574);
             this.tabMain.TabIndex = 0;
 
@@ -83,13 +89,30 @@ namespace MQNetScan.Presentation
             this.scanPage.Size = new System.Drawing.Size(886, 542);
             this.scanPage.TabIndex = 0;
 
+            // tabLocalInfo
+            this.tabLocalInfo.Controls.Add(this.localInfoPage);
+            this.tabLocalInfo.Location = new System.Drawing.Point(4, 22);
+            this.tabLocalInfo.Name = "tabLocalInfo";
+            this.tabLocalInfo.Padding = new System.Windows.Forms.Padding(3);
+            this.tabLocalInfo.Size = new System.Drawing.Size(892, 548);
+            this.tabLocalInfo.TabIndex = 1;
+            this.tabLocalInfo.Text = MQNetScan.Presentation.Common.UiText.TabLocalInfo;
+            this.tabLocalInfo.UseVisualStyleBackColor = true;
+
+            // localInfoPage
+            this.localInfoPage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.localInfoPage.Location = new System.Drawing.Point(3, 3);
+            this.localInfoPage.Name = "localInfoPage";
+            this.localInfoPage.Size = new System.Drawing.Size(886, 542);
+            this.localInfoPage.TabIndex = 0;
+
             // tabTools
             this.tabTools.Controls.Add(this.toolsPage);
             this.tabTools.Location = new System.Drawing.Point(4, 22);
             this.tabTools.Name = "tabTools";
             this.tabTools.Padding = new System.Windows.Forms.Padding(3);
             this.tabTools.Size = new System.Drawing.Size(892, 548);
-            this.tabTools.TabIndex = 1;
+            this.tabTools.TabIndex = 2;
             this.tabTools.Text = MQNetScan.Presentation.Common.UiText.TabTools;
             this.tabTools.UseVisualStyleBackColor = true;
 
@@ -106,7 +129,7 @@ namespace MQNetScan.Presentation
             this.tabSettings.Name = "tabSettings";
             this.tabSettings.Padding = new System.Windows.Forms.Padding(3);
             this.tabSettings.Size = new System.Drawing.Size(892, 548);
-            this.tabSettings.TabIndex = 2;
+            this.tabSettings.TabIndex = 3;
             this.tabSettings.Text = MQNetScan.Presentation.Common.UiText.TabSettings;
             this.tabSettings.UseVisualStyleBackColor = true;
 

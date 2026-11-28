@@ -88,6 +88,7 @@ Windows 可能要求管理员权限。请阅读程序给出的说明；只有在
 - 源代码与问题反馈：[GitHub 仓库](https://github.com/H-Mo/moequick-net-scan)
 - 下载版本：[GitHub Releases](https://github.com/H-Mo/moequick-net-scan/releases)
 - 详细需求与技术方案：见 [`doc/`](doc/)
+- v1.4.0 开发中：新增本机信息页（系统、网络、硬件、运行环境），按需懒加载和分类缓存。
 
 ## 开发者构建
 

@@ -12,6 +12,7 @@ namespace MQNetScan.Presentation.Common
         public const string AppTitle = "MoeQuick NetScan v1.3.0 - 萌快网维";
 
         public const string TabScan = "局域网探测";
+        public const string TabLocalInfo = "本机信息";
         public const string TabTools = "便捷功能";
         public const string TabSettings = "设置";
 
