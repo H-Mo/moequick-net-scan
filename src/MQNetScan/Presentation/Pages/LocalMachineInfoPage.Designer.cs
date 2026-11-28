@@ -10,6 +10,8 @@ namespace MQNetScan.Presentation.Pages
         private System.Windows.Forms.ListView listInfo;
         private System.Windows.Forms.ColumnHeader colName;
         private System.Windows.Forms.ColumnHeader colValue;
+        private System.Windows.Forms.ContextMenuStrip menuInfo;
+        private System.Windows.Forms.ToolStripMenuItem miCopyInfo;
 
         protected override void Dispose(bool disposing)
         {
@@ -30,6 +32,8 @@ namespace MQNetScan.Presentation.Pages
             this.listInfo = new System.Windows.Forms.ListView();
             this.colName = new System.Windows.Forms.ColumnHeader();
             this.colValue = new System.Windows.Forms.ColumnHeader();
+            this.menuInfo = new System.Windows.Forms.ContextMenuStrip();
+            this.miCopyInfo = new System.Windows.Forms.ToolStripMenuItem();
             this.SuspendLayout();
 
             // listCategories
@@ -42,20 +46,23 @@ namespace MQNetScan.Presentation.Pages
             this.listCategories.TabIndex = 0;
 
             // lblLoadState
-            this.lblLoadState.AutoSize = true;
+            this.lblLoadState.AutoSize = false;
             this.lblLoadState.ForeColor = System.Drawing.Color.FromArgb(90, 90, 90);
-            this.lblLoadState.Location = new System.Drawing.Point(164, 25);
+            this.lblLoadState.Location = new System.Drawing.Point(164, 17);
+            this.lblLoadState.Size = new System.Drawing.Size(360, 26);
             this.lblLoadState.Name = "lblLoadState";
             this.lblLoadState.Size = new System.Drawing.Size(0, 12);
             this.lblLoadState.TabIndex = 1;
 
             // lblUpdated
             this.lblUpdated.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblUpdated.AutoSize = true;
+            this.lblUpdated.AutoSize = false;
             this.lblUpdated.ForeColor = System.Drawing.Color.FromArgb(120, 120, 120);
-            this.lblUpdated.Location = new System.Drawing.Point(664, 25);
+            this.lblUpdated.Location = new System.Drawing.Point(620, 25);
+            this.lblUpdated.MaximumSize = new System.Drawing.Size(138, 18);
             this.lblUpdated.Name = "lblUpdated";
-            this.lblUpdated.Size = new System.Drawing.Size(0, 12);
+            this.lblUpdated.Size = new System.Drawing.Size(138, 18);
+            this.lblUpdated.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.lblUpdated.TabIndex = 2;
 
             // btnRefresh
@@ -80,8 +87,22 @@ namespace MQNetScan.Presentation.Pages
             this.listInfo.Name = "listInfo";
             this.listInfo.Size = new System.Drawing.Size(702, 468);
             this.listInfo.TabIndex = 4;
+            this.listInfo.ContextMenuStrip = this.menuInfo;
+            this.listInfo.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnInfoListMouseDown);
             this.listInfo.UseCompatibleStateImageBehavior = false;
             this.listInfo.View = System.Windows.Forms.View.Details;
+
+            // menuInfo
+            this.menuInfo.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { this.miCopyInfo });
+            this.menuInfo.Name = "menuInfo";
+            this.menuInfo.Size = new System.Drawing.Size(101, 26);
+            this.menuInfo.Opening += new System.ComponentModel.CancelEventHandler(this.OnInfoMenuOpening);
+
+            // miCopyInfo
+            this.miCopyInfo.Name = "miCopyInfo";
+            this.miCopyInfo.Size = new System.Drawing.Size(100, 22);
+            this.miCopyInfo.Text = "复制";
+            this.miCopyInfo.Click += new System.EventHandler(this.OnCopyInfoClick);
 
             // colName
             this.colName.Text = "项目";

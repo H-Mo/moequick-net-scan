@@ -177,6 +177,39 @@ namespace MQNetScan.Application
                 });
             }
             catch (Exception ex) { rows.Add(new LocalInfoRow("硬件信息", "无法完整读取：" + ex.Message)); }
+
+            try
+            {
+                int moduleCount = 0;
+                QueryWmi("SELECT Capacity, SMBIOSMemoryType, MemoryType, Speed, ConfiguredClockSpeed, PartNumber, DeviceLocator FROM Win32_PhysicalMemory",
+                    delegate(ManagementBaseObject item)
+                    {
+                        moduleCount++;
+                        string ddr = GetDdrGeneration(item);
+                        string size = FormatBytes(ParseLong(GetWmiString(item, "Capacity")));
+                        string speed = FormatMemorySpeed(GetWmiString(item, "ConfiguredClockSpeed"));
+                        string ratedSpeed = FormatMemorySpeed(GetWmiString(item, "Speed"));
+                        string locator = GetWmiString(item, "DeviceLocator");
+                        string part = GetWmiString(item, "PartNumber");
+                        List<string> details = new List<string>();
+                        details.Add(ddr);
+                        details.Add(size);
+                        details.Add("当前 " + speed);
+                        if (ratedSpeed != speed) { details.Add("标称 " + ratedSpeed); }
+                        if (locator != "未知") { details.Add("插槽 " + locator); }
+                        if (part != "未知") { details.Add("料号 " + part); }
+                        rows.Add(new LocalInfoRow("内存条 " + moduleCount.ToString(CultureInfo.InvariantCulture),
+                            String.Join(" / ", details.ToArray())));
+                    });
+                if (moduleCount == 0)
+                {
+                    rows.Add(new LocalInfoRow("内存条", "未读取到模块信息；BIOS/SMBIOS 可能未提供。"));
+                }
+                rows.Add(new LocalInfoRow("检测到的内存条数", moduleCount.ToString(CultureInfo.InvariantCulture)
+                    + " 条（WMI 返回记录数）"));
+            }
+            catch (Exception ex) { rows.Add(new LocalInfoRow("内存模块信息", "无法读取：" + ex.Message)); }
+
             return Success(LocalInfoCategory.Hardware, rows);
         }
 
@@ -289,6 +322,51 @@ namespace MQNetScan.Application
                 }
             }
             catch (Exception) { return fallback; }
+        }
+
+        internal static string DdrGenerationFromSmbiosType(string value)
+        {
+            int type;
+            if (!int.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out type)) { return "DDR 代际未知"; }
+            switch (type)
+            {
+                case 20: return "DDR";
+                case 21: return "DDR2";
+                case 24: return "DDR3";
+                case 26: return "DDR4";
+                case 34: return "DDR5";
+                default: return type == 0 || type == 2 ? "DDR 代际未知（SMBIOS 未提供）"
+                    : "DDR 代际未知（SMBIOS 类型 " + type.ToString(CultureInfo.InvariantCulture) + "）";
+            }
+        }
+
+        internal static string GetDdrGenerationFromValues(string smbiosMemoryType, string memoryType)
+        {
+            if (!string.IsNullOrEmpty(smbiosMemoryType) && smbiosMemoryType != "未知")
+            {
+                int parsed;
+                if (int.TryParse(smbiosMemoryType, NumberStyles.Integer, CultureInfo.InvariantCulture, out parsed)
+                    && parsed != 0 && parsed != 2)
+                {
+                    return DdrGenerationFromSmbiosType(smbiosMemoryType);
+                }
+            }
+            return DdrGenerationFromSmbiosType(memoryType);
+        }
+
+        internal static string FormatMemorySpeed(string value)
+        {
+            int speed;
+            if (!int.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out speed) || speed <= 0)
+            {
+                return "未知";
+            }
+            return speed.ToString(CultureInfo.InvariantCulture) + " MHz";
+        }
+
+        private static string GetDdrGeneration(ManagementBaseObject item)
+        {
+            return GetDdrGenerationFromValues(GetWmiString(item, "SMBIOSMemoryType"), GetWmiString(item, "MemoryType"));
         }
 
         private static string GetWmiString(ManagementBaseObject item, string property)

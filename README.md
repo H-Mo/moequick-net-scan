@@ -6,9 +6,9 @@
 
 ## 下载与运行
 
-1. 打开 [GitHub Releases](https://github.com/H-Mo/moequick-net-scan/releases) 下载 `MQNetScan-v1.3.0.zip`。
+1. 打开 [GitHub Releases](https://github.com/H-Mo/moequick-net-scan/releases) 下载 `MQNetScan-v1.4.0.zip`。
 2. 将 ZIP 解压到你有写入权限的文件夹，例如桌面或“文档”。
-3. 打开解压出的 `MQNetScan-v1.3.0` 文件夹，双击 `MQNetScan.exe` 运行。首次启动时，程序会在 exe 同一目录创建 `MQNetScan.ini`，用于保存设置。
+3. 打开解压出的 `MQNetScan-v1.4.0` 文件夹，双击 `MQNetScan.exe` 运行。首次启动时，程序会在 exe 同一目录创建 `MQNetScan.ini`，用于保存设置。
 
 ZIP 包内仅包含 `MQNetScan.exe` 和 `MQNetScan.exe.config`。无需安装，解压后双击程序即可运行；首次启动会在同目录生成 `MQNetScan.ini`。
 
@@ -88,7 +88,7 @@ Windows 可能要求管理员权限。请阅读程序给出的说明；只有在
 - 源代码与问题反馈：[GitHub 仓库](https://github.com/H-Mo/moequick-net-scan)
 - 下载版本：[GitHub Releases](https://github.com/H-Mo/moequick-net-scan/releases)
 - 详细需求与技术方案：见 [`doc/`](doc/)
-- v1.4.0 开发中：新增本机信息页（系统、网络、硬件、运行环境），按需懒加载和分类缓存。
+- v1.4.0 开发中：新增本机信息页（系统、网络、硬件、运行环境），按需懒加载和分类缓存；硬件页尝试显示 DDR 代际与内存模块规格，固件未提供时不猜测。
 
 ## 开发者构建
 

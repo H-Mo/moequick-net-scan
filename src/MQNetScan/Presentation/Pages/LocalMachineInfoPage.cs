@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Reflection;
 using System.Threading;
@@ -40,6 +41,8 @@ namespace MQNetScan.Presentation.Pages
         }
 
         internal int SelectedCategoryIndex { get { return listCategories.SelectedIndex; } }
+        internal bool CopyMenuEnabled { get { return miCopyInfo.Enabled; } }
+        internal string CopyValue { get { return GetContextRowValue(); } }
 
         public void ActivatePage()
         {
@@ -191,6 +194,50 @@ namespace MQNetScan.Presentation.Pages
                 btnRefresh.Enabled = !state.InProgress;
             }
             finally { listInfo.EndUpdate(); }
+        }
+
+        private void OnInfoListMouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right) { return; }
+            ListViewItem item = listInfo.GetItemAt(e.X, e.Y);
+            if (item == null)
+            {
+                listInfo.SelectedItems.Clear();
+                return;
+            }
+            listInfo.SelectedItems.Clear();
+            item.Selected = true;
+            item.Focused = true;
+        }
+
+        private void OnInfoMenuOpening(object sender, CancelEventArgs e)
+        {
+            string value = GetContextRowValue();
+            miCopyInfo.Enabled = !string.IsNullOrEmpty(value);
+            if (listInfo.SelectedItems.Count == 0) { e.Cancel = true; }
+        }
+
+        private string GetContextRowValue()
+        {
+            if (listInfo.SelectedItems.Count == 0) { return ""; }
+            ListViewItem item = listInfo.SelectedItems[0];
+            if (item.SubItems.Count < 2) { return ""; }
+            return item.SubItems[1].Text;
+        }
+
+        private void OnCopyInfoClick(object sender, EventArgs e)
+        {
+            string value = GetContextRowValue();
+            if (string.IsNullOrEmpty(value)) { return; }
+            try
+            {
+                Clipboard.SetText(value);
+                lblLoadState.Text = "已复制信息到剪贴板";
+            }
+            catch (Exception ex)
+            {
+                lblLoadState.Text = "复制失败：" + ex.Message;
+            }
         }
 
         private void AddRow(string name, string value)

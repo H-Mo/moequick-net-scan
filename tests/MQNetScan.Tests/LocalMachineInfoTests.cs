@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
@@ -13,6 +14,9 @@ namespace MQNetScan.Tests
         public static void Run()
         {
             TestCacheLifetimePolicy();
+            TestMemoryMetadataFormatting();
+            TestRefreshHeaderLayout();
+            TestContextCopySelection();
             TestCollectorReturnsOrReportsFailure();
             TestLazyLoadAndManualRefresh();
             TestExpiredCacheReloadsOnReselect();
@@ -30,6 +34,76 @@ namespace MQNetScan.Tests
                 "WMI 硬件缓存长于网络缓存");
             TestRunner.AssertEqual(TimeSpan.FromMinutes(30), LocalMachineInfoPage.CacheLifetime(2),
                 "硬件信息缓存 30 分钟");
+        }
+
+        private static void TestMemoryMetadataFormatting()
+        {
+            Console.WriteLine();
+            Console.WriteLine("[LOCAL-INFO-MEMORY] 内存规格信息格式");
+            TestRunner.BeginCase("识别 SMBIOS DDR 代际码与速度字段");
+            TestRunner.AssertEqual("DDR3", LocalMachineInfoService.DdrGenerationFromSmbiosType("24"), "类型 24 为 DDR3");
+            TestRunner.AssertEqual("DDR4", LocalMachineInfoService.DdrGenerationFromSmbiosType("26"), "类型 26 为 DDR4");
+            TestRunner.AssertEqual("DDR5", LocalMachineInfoService.DdrGenerationFromSmbiosType("34"), "类型 34 为 DDR5");
+            TestRunner.AssertTrue(LocalMachineInfoService.DdrGenerationFromSmbiosType("0").Contains("未知"),
+                "固件未提供时显示未知");
+            TestRunner.AssertEqual("3200 MHz", LocalMachineInfoService.FormatMemorySpeed("3200"), "速度追加 MHz");
+            TestRunner.AssertEqual("未知", LocalMachineInfoService.FormatMemorySpeed("0"), "无速度不猜测");
+        }
+
+        private static void TestRefreshHeaderLayout()
+        {
+            Console.WriteLine();
+            Console.WriteLine("[LOCAL-INFO-LAYOUT] 更新时间与刷新按钮布局");
+            TestRunner.BeginCase("更新时间区域不与刷新按钮重叠");
+            using (Form host = new Form())
+            using (LocalMachineInfoPage page = new LocalMachineInfoPage(delegate(LocalInfoCategory category)
+            {
+                return CreateSnapshot(category, "layout");
+            }))
+            {
+                host.Controls.Add(page);
+                host.Show();
+                Control updated = Get<Control>(page, "lblUpdated");
+                Control refresh = Get<Control>(page, "btnRefresh");
+                Control state = Get<Control>(page, "lblLoadState");
+                TestRunner.AssertTrue(!updated.Bounds.IntersectsWith(refresh.Bounds),
+                    "更新时间与刷新按钮不相交");
+                TestRunner.AssertTrue(updated.Right <= refresh.Left,
+                    "刷新按钮位于更新时间区域右侧");
+                TestRunner.AssertTrue(state.Right <= updated.Left,
+                    "加载状态区域不挤占更新时间");
+            }
+        }
+
+        private static void TestContextCopySelection()
+        {
+            Console.WriteLine();
+            Console.WriteLine("[LOCAL-INFO-COPY] 单项右键复制");
+            TestRunner.BeginCase("右键行提供复制值，空白处不显示菜单");
+            using (Form host = new Form())
+            using (LocalMachineInfoPage page = new LocalMachineInfoPage(delegate(LocalInfoCategory category)
+            {
+                return CreateSnapshot(category, "copy-value");
+            }))
+            {
+                host.Controls.Add(page);
+                host.Show();
+                page.ActivatePage();
+                WaitForIdle(page, 0);
+
+                ListView list = Get<ListView>(page, "listInfo");
+                list.Items[0].Selected = true;
+                InvokePrivate(page, "OnInfoMenuOpening", Get<object>(page, "menuInfo"), new CancelEventArgs(false));
+                TestRunner.AssertTrue(page.CopyMenuEnabled, "有效数据行启用复制");
+                TestRunner.AssertEqual("copy-value", page.CopyValue, "复制内容为信息列值");
+
+                list.Items[0].Selected = false;
+                InvokePrivate(page, "OnInfoMenuOpening", Get<object>(page, "menuInfo"), new CancelEventArgs(false));
+                TestRunner.AssertTrue(!page.CopyMenuEnabled, "无选中行时禁用复制");
+
+                InvokePrivate(page, "OnInfoListMouseDown", list, new MouseEventArgs(MouseButtons.Right, 1, 2, 450, 0));
+                TestRunner.AssertEqual(0, list.SelectedItems.Count, "右键空白区域清除选择");
+            }
         }
 
         private static void TestCollectorReturnsOrReportsFailure()
