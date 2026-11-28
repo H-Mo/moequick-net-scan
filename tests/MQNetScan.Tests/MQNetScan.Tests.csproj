@@ -78,6 +78,7 @@
     <Compile Include="UpdateServiceTests.cs" />
     <Compile Include="SettingsUpdateTests.cs" />
     <Compile Include="DeviceNameResolverTests.cs" />
+    <Compile Include="LocalMachineInfoTests.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -30,7 +30,7 @@ namespace MQNetScan.Tests
 
             TestRunner.AssertTrue(
                 MQNetScan.Presentation.Common.UiText.AppTitle
-                    == "MoeQuick NetScan v1.3.0 - 萌快网维",
+                    == "MoeQuick NetScan v1.4.0 - 萌快网维",
                 "标题严格为指定字符串");
 
             Console.WriteLine();

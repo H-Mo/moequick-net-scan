@@ -57,6 +57,11 @@ namespace MQNetScan.Infrastructure
             bool order);
 
         // -------------------------------------------------------------------
+        /// <summary>系统启动后经过的毫秒数，64 位计数避免长时间运行时溢出。</summary>
+        [DllImport("kernel32.dll", ExactSpelling = true)]
+        public static extern ulong GetTickCount64();
+
+        // -------------------------------------------------------------------
         // 常用错误码
         // -------------------------------------------------------------------
         /// <summary>成功。</summary>

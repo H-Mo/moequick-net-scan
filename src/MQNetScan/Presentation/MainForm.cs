@@ -168,6 +168,14 @@ namespace MQNetScan.Presentation
             return false;
         }
 
+        private void OnMainTabChanged(object sender, EventArgs e)
+        {
+            if (tabMain.SelectedTab == tabLocalInfo)
+            {
+                localInfoPage.ActivatePage();
+            }
+        }
+
         private void OnMainFormShown(object sender, EventArgs e)
         {
             if (_updateCheckStarted) { return; }

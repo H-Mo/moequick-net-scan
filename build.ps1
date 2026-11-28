@@ -61,7 +61,7 @@ $Script:RefAssemblyPackUrl = 'https://api.nuget.org/v3-flatcontainer/microsoft.n
 
 # 允许出现在最终 exe 引用表中的程序集（project-structure.md §11）
 $Script:AllowedReferences = @(
-    'mscorlib', 'System', 'System.Core', 'System.Drawing', 'System.Runtime.Serialization', 'System.Windows.Forms', 'System.Xml'
+    'mscorlib', 'System', 'System.Core', 'System.Drawing', 'System.Runtime.Serialization', 'System.Management', 'System.Windows.Forms', 'System.Xml'
 )
 
 # 禁用 API 规则：错误信息 -> 正则（按 .cs 文件逐行扫描）
@@ -437,7 +437,7 @@ function New-PortableReleaseZip {
     if (-not $PackageZip) { return }
     if ($Configuration -ne 'Release') { throw '-PackageZip 只能与 -Configuration Release 一起使用' }
 
-    $packageName = 'MQNetScan-v1.3.0'
+    $packageName = 'MQNetScan-v1.4.0'
     $stageRoot = Join-Path $Root 'build\package-stage'
     $packageDir = Join-Path $stageRoot $packageName
     $zipPath = Join-Path $OutDir ("{0}.zip" -f $packageName)
@@ -479,7 +479,7 @@ function New-PortableReleaseZip {
 $startTime = Get-Date
 
 if ($Configuration -eq 'Release' -and $PackageZip) {
-    $stalePackage = Join-Path $Root 'build\Release\MQNetScan-v1.3.0.zip'
+    $stalePackage = Join-Path $Root 'build\Release\MQNetScan-v1.4.0.zip'
     if (Test-Path $stalePackage) { Remove-Item $stalePackage -Force }
 }
 

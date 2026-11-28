@@ -56,6 +56,7 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Management" />
   </ItemGroup>
 
   <ItemGroup>
@@ -65,6 +66,7 @@
     <Compile Include="Application\ReportBuilder.cs" />
     <Compile Include="Application\ReportSaveService.cs" />
     <Compile Include="Application\ToolsService.cs" />
+    <Compile Include="Application\LocalMachineInfoService.cs" />
     <Compile Include="Application\UpdateService.cs" />
     <Compile Include="Engine\AddressQueue.cs" />
     <Compile Include="Engine\ArpProber.cs" />
@@ -106,6 +108,12 @@
     </Compile>
     <Compile Include="Presentation\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Presentation\Pages\LocalMachineInfoPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Presentation\Pages\LocalMachineInfoPage.Designer.cs">
+      <DependentUpon>LocalMachineInfoPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Presentation\Pages\ScanPage.cs">
       <SubType>UserControl</SubType>
